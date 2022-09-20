@@ -19,38 +19,29 @@ namespace dae
 
 			float discriminant = powf(B, 2) - 4 * A * C;
 
-			float tmax = (-B + sqrtf(discriminant)) / 2 * A;
-			float tmin = (- B - sqrtf(discriminant))/2*A;
+			float tFar = (-B + sqrtf(discriminant)) / 2 * A;
+			float tClose = (- B - sqrtf(discriminant))/2*A;
 
-			//float test1 = A * powf(tmin, 2) + B * tmin + C;
-			//float test2 = A * powf(tmax, 2) + B * tmax + C;
+	
 
 			//if(discriminant > 0 && (test1 > 0 || test2 > 0))
 			if(discriminant > 0)
 			{
-				if(tmin > ray.min && tmin < ray.max)
+				if(tClose > ray.min && tClose < ray.max)
 				{
 					hitRecord.didHit = true;
 					hitRecord.materialIndex = sphere.materialIndex;
-					hitRecord.t = tmin;
-					hitRecord.origin = ray.origin + tmin * ray.direction ;
-				} else if(tmax > ray.min && tmax < ray.max)
+					hitRecord.t = tClose;
+					hitRecord.origin = ray.origin + tClose * ray.direction ;
+				} else if(tFar > ray.min && tFar < ray.max)
 				{
 					hitRecord.didHit = true;
 					hitRecord.materialIndex = sphere.materialIndex;
-					hitRecord.t = tmax;
-					hitRecord.origin = ray.origin + tmax * ray.direction;
+					hitRecord.t = tFar;
+					hitRecord.origin = ray.origin + tFar * ray.direction;
 				}
 				return true;
 			}
-			/*if(test1 > 0 || test2 > 0)
-			{
-				hitRecord.didHit = true;
-				hitRecord.materialIndex = sphere.materialIndex;
-				hitRecord.t = tmin;
-				hitRecord.origin = ray.origin;
-				return true;
-			}*/
 
 
 			return false;
@@ -67,7 +58,17 @@ namespace dae
 		inline bool HitTest_Plane(const Plane& plane, const Ray& ray, HitRecord& hitRecord, bool ignoreHitRecord = false)
 		{
 			//todo W1
-			assert(false && "No Implemented Yet!");
+			//assert(false && "No Implemented Yet!");
+			float t = Vector3::Dot((plane.origin - ray.origin) , plane.normal) / Vector3::Dot(ray.direction , plane.normal);
+			if(t > ray.min && t < ray.max)
+			{
+				hitRecord.didHit = true;
+				hitRecord.t = t;
+				hitRecord.normal = plane.normal;
+				hitRecord.origin = ray.origin + t * ray.direction;
+				hitRecord.materialIndex = plane.materialIndex;
+				return true;
+			}
 			return false;
 		}
 

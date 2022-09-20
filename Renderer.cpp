@@ -39,10 +39,10 @@ void Renderer::Render(Scene* pScene) const
 			
 			//ColorRGB finalColor{ gradient, gradient, gradient };
 
-			float cx = (((2 * (px + 0.5)) / m_Width) - 1) * m_AspectRatio;
-			float cy = 1 - (2 * (py + 0.5)) / m_Height;
+			float cx = static_cast<float>((((2 * (px + 0.5)) / m_Width) - 1)) * m_AspectRatio;
+			float cy = static_cast<float>(1 - (2 * (py + 0.5)) / m_Height);
 			Vector3 rayDirection{ cx,cy,1 };
-			Ray viewRay{ {0,0,0},rayDirection };
+			Ray viewRay{ {0,0,0},rayDirection.Normalized() };
 
 			ColorRGB finalColor{};
 

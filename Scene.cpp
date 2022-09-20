@@ -41,6 +41,18 @@ namespace dae {
 				
 			}
 		}
+
+		for (size_t i{}; i < GetPlaneGeometries().size(); i++)
+		{
+			HitRecord record{};
+			GeometryUtils::HitTest_Plane(m_PlaneGeometries[i], ray, record, false);
+			if (record.t < smallestRecord.t)
+			{
+				smallestRecord = record;
+
+			}
+		}
+
 		closestHit = smallestRecord;
 
 

@@ -12,38 +12,66 @@ namespace dae
 		//SPHERE HIT-TESTS
 		inline bool HitTest_Sphere(const Sphere& sphere, const Ray& ray, HitRecord& hitRecord, bool ignoreHitRecord = false)
 		{
-			//todo W1
-			float A = Vector3::Dot(ray.direction, ray.direction);
-			float B = Vector3::Dot(2*ray.direction, (ray.origin - sphere.origin));
-			float C = Vector3::Dot((ray.origin - sphere.origin) , (ray.origin - sphere.origin)) - powf(sphere.radius, 2.f);
+			////todo W1
+			//float A = Vector3::Dot(ray.direction, ray.direction);
+			//float B = Vector3::Dot(2*ray.direction, (ray.origin - sphere.origin));
+			//float C = Vector3::Dot((ray.origin - sphere.origin) , (ray.origin - sphere.origin)) - powf(sphere.radius, 2.f);
 
-			float discriminant = powf(B, 2) - 4 * A * C;
+			//float discriminant = powf(B, 2) - 4 * A * C;
 
-			float tFar = (-B + sqrtf(discriminant)) / 2 * A;
-			float tClose = (- B - sqrtf(discriminant))/2*A;
+			//float tFar = (-B + sqrtf(discriminant)) / 2 * A;
+			//float tClose = (- B - sqrtf(discriminant))/2*A;
 
 	
+			//
+			////if(discriminant > 0 && (test1 > 0 || test2 > 0))
+			//if(discriminant > 0)
+			//{
+			//	if(tClose > ray.min && tClose < ray.max)
+			//	{
+			//		hitRecord.didHit = true;
+			//		hitRecord.materialIndex = sphere.materialIndex;
+			//		hitRecord.t = tClose;
+			//		hitRecord.origin = ray.origin + tClose * ray.direction ;
+			//		
+			//	} else if(tFar > ray.min && tFar < ray.max)
+			//	{
+			//		hitRecord.didHit = true;
+			//		hitRecord.materialIndex = sphere.materialIndex;
+			//		hitRecord.t = tFar;
+			//		hitRecord.origin = ray.origin + tFar * ray.direction;
+			//	}
+			//	return true;
+			//}
 
-			//if(discriminant > 0 && (test1 > 0 || test2 > 0))
-			if(discriminant > 0)
-			{
-				if(tClose > ray.min && tClose < ray.max)
-				{
+
+			//return false;
+
+			float A{ Vector3::Dot(ray.direction, ray.direction) };
+			float B{ Vector3::Dot((2 * ray.direction), (ray.origin - sphere.origin)) };
+			float C{ Vector3::Dot((ray.origin - sphere.origin), (ray.origin - sphere.origin)) - powf(sphere.radius,2) };
+
+			float discriminant{ powf(B,2) - 4 * A * C };
+			float tMax{ (-B + sqrtf(discriminant)) / 2 * A };
+			float tMin{ (-B - sqrtf(discriminant)) / 2 * A };
+
+			if (discriminant > 0) {
+				if (tMin > ray.min && tMin < ray.max) {
 					hitRecord.didHit = true;
 					hitRecord.materialIndex = sphere.materialIndex;
-					hitRecord.t = tClose;
-					hitRecord.origin = ray.origin + tClose * ray.direction ;
-				} else if(tFar > ray.min && tFar < ray.max)
-				{
-					hitRecord.didHit = true;
-					hitRecord.materialIndex = sphere.materialIndex;
-					hitRecord.t = tFar;
-					hitRecord.origin = ray.origin + tFar * ray.direction;
+					hitRecord.t = tMin;
+					hitRecord.origin = ray.origin + tMin * ray.direction;
+					return true;
 				}
-				return true;
+				else if (tMax > ray.min && tMax < ray.max)
+				{
+					hitRecord.didHit = true;
+					hitRecord.materialIndex = sphere.materialIndex;
+					hitRecord.t = tMax;
+					hitRecord.origin = ray.origin + tMax * ray.direction;
+					return true;
+				}
 			}
-
-
 			return false;
 		}
 

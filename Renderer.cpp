@@ -71,18 +71,18 @@ void Renderer::Render(Scene* pScene) const
 			//Update Color in Buffer
 			finalColor.MaxToOne();
 
-			//shadowing
-			for(auto light : pScene->GetLights())
-			{
-				Ray lightRay{ light.origin,light.direction,0.0001f,LightUtils::GetDirectionToLight(light,closestHit.origin).Magnitude() };
-				if(pScene->DoesHit(lightRay))
+				for(auto light : pScene->GetLights())
 				{
-					finalColor.r *= 0.5f;
-					finalColor.g *= 0.5f;
-					finalColor.b *= 0.5f;
+					Ray lightRay{ closestHit.origin+(closestHit.normal*0.0001f),LightUtils::GetDirectionToLight(light,closestHit.origin).Normalized(),0.0001f,LightUtils::GetDirectionToLight(light,closestHit.origin).Magnitude() };
+					if(pScene->DoesHit(lightRay))
+					{
+						finalColor.r *= 0.5f;
+						finalColor.g *= 0.5f;
+						finalColor.b *= 0.5f;
 
+					}
 				}
-			}
+			//shadowing
 			m_pBufferPixels[px + (py * m_Width)] = SDL_MapRGB(m_pBuffer->format,
 				static_cast<uint8_t>(finalColor.r * 255),
 				static_cast<uint8_t>(finalColor.g * 255),

@@ -116,11 +116,10 @@ namespace dae
 		{
 			if(light.type == LightType::Directional)
 			{
-				return Vector3(light.origin);
-			} else
-			{
-				return Vector3(light.origin - origin);
-			}
+				return Vector3(light.direction);
+			} 
+
+			return Vector3(light.origin - origin);
 			////todo W3
 			//assert(false && "No Implemented Yet!");
 			//return {};

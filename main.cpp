@@ -45,9 +45,11 @@ int main(int argc, char* args[])
 	const auto pTimer = new Timer();
 	const auto pRenderer = new Renderer(pWindow);
 
-	const auto pScene = new Scene_W1();
-	pScene->Initialize();
+	//const auto pScene = new Scene_W1();
+	const auto pScene2 = new Scene_W2();
 
+	//pScene->Initialize();
+	pScene2->Initialize();
 	//Start loop
 	pTimer->Start();
 	float printTimer = 0.f;
@@ -72,10 +74,12 @@ int main(int argc, char* args[])
 		}
 
 		//--------- Update ---------
-		pScene->Update(pTimer);
+		//pScene->Update(pTimer);
+		pScene2->Update(pTimer);
 
 		//--------- Render ---------
-		pRenderer->Render(pScene);
+		//pRenderer->Render(pScene);
+		pRenderer->Render(pScene2);
 
 		//--------- Timer ---------
 		pTimer->Update();
@@ -99,7 +103,8 @@ int main(int argc, char* args[])
 	pTimer->Stop();
 
 	//Shutdown "framework"
-	delete pScene;
+	//delete pScene;
+	delete pScene2;
 	delete pRenderer;
 	delete pTimer;
 

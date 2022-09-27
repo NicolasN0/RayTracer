@@ -28,6 +28,8 @@ void Renderer::Render(Scene* pScene) const
 	auto& materials = pScene->GetMaterials();
 	auto& lights = pScene->GetLights();
 
+	float FOV = tan(camera.fovAngle / 2);
+	const Matrix cameraToWorld = camera.CalculateCameraToWorld();
 	for (int px{}; px < m_Width; ++px)
 	{
 		for (int py{}; py < m_Height; ++py)
@@ -39,10 +41,13 @@ void Renderer::Render(Scene* pScene) const
 			
 			//ColorRGB finalColor{ gradient, gradient, gradient };
 
-			float cx = static_cast<float>((((2 * (px + 0.5)) / m_Width) - 1)) * m_AspectRatio;
-			float cy = static_cast<float>(1 - (2 * (py + 0.5)) / m_Height);
+			float cx = static_cast<float>((((2 * (px + 0.5)) / m_Width) - 1)) * m_AspectRatio * FOV;
+			float cy = static_cast<float>(1 - (2 * (py + 0.5)) / m_Height) * FOV;
 			Vector3 rayDirection{ cx,cy,1 };
-			Ray viewRay{ {0,0,0},rayDirection.Normalized() };
+			//Ray viewRay{ {0,0,0},rayDirection.Normalized() };
+			//Ray viewRay{ camera.origin,rayDirection.Normalized() };
+			Ray viewRay{ camera.origin,cameraToWorld.TransformVector(rayDirection.Normalized()) };
+
 
 			ColorRGB finalColor{};
 

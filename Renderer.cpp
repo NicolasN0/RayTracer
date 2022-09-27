@@ -66,10 +66,23 @@ void Renderer::Render(Scene* pScene) const
 				/*const float scaled_t = (closestHit.t - 50.f) / 40.f;
 				finalColor = { scaled_t,scaled_t,scaled_t };*/
 			}
+
 			//ColorRGB finalColor{ hitray.direction.x,hitray.direction.y,hitray.direction.z };
 			//Update Color in Buffer
 			finalColor.MaxToOne();
 
+			//shadowing
+			for(auto light : pScene->GetLights())
+			{
+				Ray lightRay{ light.origin,light.direction,0.0001f,LightUtils::GetDirectionToLight(light,closestHit.origin).Magnitude() };
+				if(pScene->DoesHit(lightRay))
+				{
+					finalColor.r *= 0.5f;
+					finalColor.g *= 0.5f;
+					finalColor.b *= 0.5f;
+
+				}
+			}
 			m_pBufferPixels[px + (py * m_Width)] = SDL_MapRGB(m_pBuffer->format,
 				static_cast<uint8_t>(finalColor.r * 255),
 				static_cast<uint8_t>(finalColor.g * 255),

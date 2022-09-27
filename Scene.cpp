@@ -61,8 +61,27 @@ namespace dae {
 
 	bool Scene::DoesHit(const Ray& ray) const
 	{
+		for (size_t i{}; i < GetSphereGeometries().size(); i++)
+		{
+			HitRecord record{};
+			if(GeometryUtils::HitTest_Sphere(m_SphereGeometries[i], ray, record, false))
+			{
+				return true;
+			}
+		
+		}
+
+		for (size_t i{}; i < GetPlaneGeometries().size(); i++)
+		{
+			HitRecord record{};
+			if(GeometryUtils::HitTest_Plane(m_PlaneGeometries[i], ray, record, false))
+			{
+				return true;
+			}
+		
+		}
 		//todo W3
-		assert(false && "No Implemented Yet!");
+		
 		return false;
 	}
 

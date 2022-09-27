@@ -81,13 +81,15 @@ namespace dae
 
 		
 			//todo: W2
-			/*if(SDL_BUTTON(mouseState) == 1)
+			if(SDL_BUTTON(mouseState) == 1)
 			{
-				totalPitch += mouseX * rotspeed * deltaTime;
-				totalYaw += mouseY * rotspeed * deltaTime;
-			}*/
-			totalPitch += 0.05f * deltaTime;
-			totalYaw += 0.05f * deltaTime;
+				/*totalPitch -= mouseY * rotspeed * deltaTime;
+				totalYaw -= mouseX * rotspeed * deltaTime;*/
+				totalPitch -= mouseX * rotspeed * deltaTime;
+				totalYaw -= mouseY * rotspeed * deltaTime;
+			}
+			/*totalPitch -= 0.05f * deltaTime;
+			totalYaw -= 0.05f * deltaTime;*/
 			
 
 			Matrix finalRot = Matrix::CreateRotation(totalPitch, totalYaw, 0);

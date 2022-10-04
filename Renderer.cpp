@@ -30,6 +30,17 @@ void Renderer::Render(Scene* pScene) const
 
 	float FOV = tan(camera.fovAngle / 2);
 	const Matrix cameraToWorld = camera.CalculateCameraToWorld();
+
+	float screenWidth{ static_cast<float>(m_Width) };
+	float screenHeight{ static_cast<float>(m_Height) };
+	float aspectRatio{ screenWidth / screenHeight };
+
+	float fov{ tan(camera.fovAngle / 2) };
+	Matrix camToWorld{ camera.CalculateCameraToWorld() };
+
+	size_t lightsSize{ lights.size() };
+	float offset = 0.0001f;
+
 	for (int px{}; px < m_Width; ++px)
 	{
 		for (int py{}; py < m_Height; ++py)
@@ -38,14 +49,12 @@ void Renderer::Render(Scene* pScene) const
 			gradient += py / static_cast<float>(m_Width);
 			gradient /= 2.0f;
 
-			
-			//ColorRGB finalColor{ gradient, gradient, gradient };
+
 
 			float cx = static_cast<float>((((2 * (px + 0.5)) / m_Width) - 1)) * m_AspectRatio * FOV;
 			float cy = static_cast<float>(1 - (2 * (py + 0.5)) / m_Height) * FOV;
 			Vector3 rayDirection{ cx,cy,1 };
-			//Ray viewRay{ {0,0,0},rayDirection.Normalized() };
-			//Ray viewRay{ camera.origin,rayDirection.Normalized() };
+		
 			Ray viewRay{ camera.origin,cameraToWorld.TransformVector(rayDirection.Normalized()) };
 
 
@@ -53,74 +62,105 @@ void Renderer::Render(Scene* pScene) const
 
 			HitRecord closestHit{};
 
-			//Sphere testSphere{ {0.f,0.f,100.f},50.f,0 };
+			
 
-			//GeometryUtils::HitTest_Sphere(testSphere, viewRay, closestHit);
 
 			pScene->GetClosestHit(viewRay, closestHit);
 
 
-			if(closestHit.didHit)
+			//if(closestHit.didHit)
+			//{
+			//	ColorRGB ergb;
+			//	ColorRGB BRDFrgb;
+			//	for (auto light : pScene->GetLights())
+			//	{
+			//		Vector3 direction{ LightUtils::GetDirectionToLight(light,closestHit.origin) };
+			//		Ray lightRay{ closestHit.origin + (closestHit.normal * 0.0001f), direction.Normalized(), 0.0001f, direction.Magnitude() };
+
+			//		float dot{ Vector3::Dot(closestHit.normal, LightUtils::GetDirectionToLight(light, closestHit.origin).Normalized()) };
+			//		if (dot > 0) {
+
+
+			//			ergb = LightUtils::GetRadiance(light, closestHit.origin);
+			//			BRDFrgb += materials[closestHit.materialIndex]->Shade(closestHit,lightRay.direction,camera.forward);
+			//			finalColor += ergb * BRDFrgb * dot;
+			//			
+			//		}
+
+			//		//shadow
+			//		if(m_ShadowsEnabled)
+			//		{
+			//			if (pScene->DoesHit(lightRay))
+			//			{
+			//			
+			//				finalColor *= 0.5f;
+
+			//			}
+			//			
+			//		}
+
+			//	}
+
+			//}
+
+
+			if (closestHit.didHit)
 			{
 				ColorRGB ergb;
 				ColorRGB BRDFrgb;
 				for (auto light : pScene->GetLights())
 				{
 					float dot{ Vector3::Dot(closestHit.normal, LightUtils::GetDirectionToLight(light, closestHit.origin).Normalized()) };
-					if (dot > 0) {
-						
-						ergb = LightUtils::GetRadiance(light, closestHit.origin);
-						BRDFrgb += materials[closestHit.materialIndex]->Shade(closestHit);
-						//finalColor += BRDFrgb * dot;
-						finalColor += ergb * BRDFrgb * dot;
-						
-					}
+					if (dot < 0) {
 
-					//shadow
-					if(m_ShadowsEnabled)
+						continue;
+
+					}
+					Vector3 direction{ LightUtils::GetDirectionToLight(light,closestHit.origin) };
+					Ray lightRay{ closestHit.origin + (closestHit.normal * 0.0001f), direction.Normalized(), 0.0001f, direction.Magnitude() };
+
+					ergb = LightUtils::GetRadiance(light, closestHit.origin);
+					//BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit, lightRay.direction, camera.forward);
+					BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit, -lightRay.direction, viewRay.direction.Normalized());
+
+					switch(m_CurrentLightingMode)
 					{
-						Ray lightRay{ closestHit.origin + (closestHit.normal * 0.0001f),LightUtils::GetDirectionToLight(light,closestHit.origin).Normalized(),0.0001f,LightUtils::GetDirectionToLight(light,closestHit.origin).Magnitude() };
+					case LightingMode::ObservedArea:
+						finalColor += ColorRGB(dot, dot, dot);
+						break;
+					case LightingMode::Radiance:
+						finalColor += ergb;
+						break;
+					case LightingMode::BRDF:
+						finalColor += BRDFrgb;
+						break;
+					case LightingMode::Combined:
+						finalColor += ergb * BRDFrgb * dot;
+						break;
+					}
+					//shadow
+					if (m_ShadowsEnabled)
+					{
 						if (pScene->DoesHit(lightRay))
 						{
-						
+
 							finalColor *= 0.5f;
 
 						}
-						
+
 					}
 
 				}
-				
-				//BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit);
-				
-				//add
-				//finalColor += BRDFrgb ;
-
-				//finalColor += ergb ;
-
-				//finalColor = materials[closestHit.materialIndex]->Shade();
-
 
 			}
+			
+
 
 			//ColorRGB finalColor{ hitray.direction.x,hitray.direction.y,hitray.direction.z };
 			//Update Color in Buffer
 
 			finalColor.MaxToOne();
 
-			//shadowing
-				/*for(auto light : pScene->GetLights())
-				{
-					
-					Ray lightRay{ closestHit.origin+(closestHit.normal*0.0001f),LightUtils::GetDirectionToLight(light,closestHit.origin).Normalized(),0.0001f,LightUtils::GetDirectionToLight(light,closestHit.origin).Magnitude() };
-					if(pScene->DoesHit(lightRay))
-					{
-						finalColor.r *= 0.5f;
-						finalColor.g *= 0.5f;
-						finalColor.b *= 0.5f;
-
-					}
-				}*/
 
 			m_pBufferPixels[px + (py * m_Width)] = SDL_MapRGB(m_pBuffer->format,
 				static_cast<uint8_t>(finalColor.r * 255),

@@ -40,7 +40,13 @@ namespace dae
 		{
 			//todo: W3
 			//assert(false && "Not Implemented Yet");
-			return {};
+			Vector3 reflect = l - 2 * Vector3::Dot(n, l) * n;
+			float angle = Vector3::Dot(reflect, v);
+			float phongSpecRef = ks * powf(angle, exp);
+			ColorRGB color { phongSpecRef,phongSpecRef,phongSpecRef };
+			return color;
+
+			
 		}
 
 		/**
@@ -54,7 +60,8 @@ namespace dae
 		{
 			//todo: W3
 			//assert(false && "Not Implemented Yet");
-			return {};
+			ColorRGB F = f0 + (ColorRGB(1, 1, 1) - f0) * powf((1 - (Vector3::Dot(h, v))),5);
+			return F;
 		}
 
 		/**
@@ -67,8 +74,14 @@ namespace dae
 		static float NormalDistribution_GGX(const Vector3& n, const Vector3& h, float roughness)
 		{
 			//todo: W3
+			float alphaRoughe = powf(roughness, 2);
+			float roughSquar = powf(alphaRoughe, 2);
+			float dotNHSquar = powf(Vector3::Dot(n, h), 2);
+			float B = powf(roughSquar, 2) - 1;
+
+			float normDistrubation = roughSquar /( PI * powf(dotNHSquar * B + 1, 2));
 			//assert(false && "Not Implemented Yet");
-			return {};
+			return normDistrubation;
 		}
 
 
@@ -82,8 +95,14 @@ namespace dae
 		static float GeometryFunction_SchlickGGX(const Vector3& n, const Vector3& v, float roughness)
 		{
 			//todo: W3
+			
+			float alphaRoughe = powf(roughness, 2);
+			float k = powf((alphaRoughe + 1), 2) / 8;
+
+			float top = Vector3::Dot(n, v);
+			
 			//assert(false && "Not Implemented Yet");
-			return {};
+			return top/(top*(1-k)+k);
 		}
 
 		/**
@@ -97,8 +116,9 @@ namespace dae
 		static float GeometryFunction_Smith(const Vector3& n, const Vector3& v, const Vector3& l, float roughness)
 		{
 			//todo: W3
+			
 			//assert(false && "Not Implemented Yet");
-			return {};
+			return GeometryFunction_SchlickGGX(n, v, roughness) * GeometryFunction_SchlickGGX(n, l, roughness);;
 		}
 
 	}

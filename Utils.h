@@ -61,6 +61,7 @@ namespace dae
 					hitRecord.materialIndex = sphere.materialIndex;
 					hitRecord.t = tMin;
 					hitRecord.origin = ray.origin + tMin * ray.direction;
+					hitRecord.normal = (hitRecord.origin - sphere.origin).Normalized();
 					return true;
 				}
 				else if (tMax > ray.min && tMax < ray.max)
@@ -69,6 +70,7 @@ namespace dae
 					hitRecord.materialIndex = sphere.materialIndex;
 					hitRecord.t = tMax;
 					hitRecord.origin = ray.origin + tMax * ray.direction;
+					hitRecord.normal = (hitRecord.origin - sphere.origin).Normalized();
 					return true;
 				}
 			}
@@ -155,9 +157,19 @@ namespace dae
 
 		inline ColorRGB GetRadiance(const Light& light, const Vector3& target)
 		{
-			//todo W3
-			assert(false && "No Implemented Yet!");
-			return {};
+			Vector3 dist;
+
+			switch(light.type)
+			{
+			case LightType::Directional:
+				return light.color * light.intensity;
+				break;
+			case LightType::Point:
+				dist = light.origin - target ;
+				return light.color * light.intensity / powf(dist.Magnitude(), 2);
+				break;
+			}
+
 		}
 	}
 

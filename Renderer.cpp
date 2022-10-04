@@ -59,20 +59,59 @@ void Renderer::Render(Scene* pScene) const
 
 			pScene->GetClosestHit(viewRay, closestHit);
 
+
 			if(closestHit.didHit)
 			{
+				ColorRGB ergb;
+				ColorRGB BRDFrgb;
+				for (auto light : pScene->GetLights())
+				{
+					float dot{ Vector3::Dot(closestHit.normal, LightUtils::GetDirectionToLight(light, closestHit.origin).Normalized()) };
+					if (dot > 0) {
+						
+						ergb = LightUtils::GetRadiance(light, closestHit.origin);
+						BRDFrgb += materials[closestHit.materialIndex]->Shade(closestHit);
+						//finalColor += BRDFrgb * dot;
+						finalColor += ergb * BRDFrgb * dot;
+						
+					}
 
-				finalColor = materials[closestHit.materialIndex]->Shade();
-				/*const float scaled_t = (closestHit.t - 50.f) / 40.f;
-				finalColor = { scaled_t,scaled_t,scaled_t };*/
+					//shadow
+					if(m_ShadowsEnabled)
+					{
+						Ray lightRay{ closestHit.origin + (closestHit.normal * 0.0001f),LightUtils::GetDirectionToLight(light,closestHit.origin).Normalized(),0.0001f,LightUtils::GetDirectionToLight(light,closestHit.origin).Magnitude() };
+						if (pScene->DoesHit(lightRay))
+						{
+						
+							finalColor *= 0.5f;
+
+						}
+						
+					}
+
+				}
+				
+				//BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit);
+				
+				//add
+				//finalColor += BRDFrgb ;
+
+				//finalColor += ergb ;
+
+				//finalColor = materials[closestHit.materialIndex]->Shade();
+
+
 			}
 
 			//ColorRGB finalColor{ hitray.direction.x,hitray.direction.y,hitray.direction.z };
 			//Update Color in Buffer
+
 			finalColor.MaxToOne();
 
-				for(auto light : pScene->GetLights())
+			//shadowing
+				/*for(auto light : pScene->GetLights())
 				{
+					
 					Ray lightRay{ closestHit.origin+(closestHit.normal*0.0001f),LightUtils::GetDirectionToLight(light,closestHit.origin).Normalized(),0.0001f,LightUtils::GetDirectionToLight(light,closestHit.origin).Magnitude() };
 					if(pScene->DoesHit(lightRay))
 					{
@@ -81,8 +120,8 @@ void Renderer::Render(Scene* pScene) const
 						finalColor.b *= 0.5f;
 
 					}
-				}
-			//shadowing
+				}*/
+
 			m_pBufferPixels[px + (py * m_Width)] = SDL_MapRGB(m_pBuffer->format,
 				static_cast<uint8_t>(finalColor.r * 255),
 				static_cast<uint8_t>(finalColor.g * 255),

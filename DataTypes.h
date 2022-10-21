@@ -95,6 +95,7 @@ namespace dae
 		void RotateY(float yaw)
 		{
 			rotationTransform = Matrix::CreateRotationY(yaw);
+			
 		}
 
 		void Scale(const Vector3& scale)
@@ -123,12 +124,27 @@ namespace dae
 
 		void CalculateNormals()
 		{
-			assert(false && "No Implemented Yet!");
+			for(int i{} ; i < indices.size();i+=3)
+			{
+				//Vector3 a = positions[i];
+				//Vector3 b = positions[i + 1];
+				//Vector3 c = positions[i + 2];
+
+				/*Vector3 a = positions[i+1] - positions[i];
+				Vector3 b = positions[i+2] - positions[i];*/
+
+				Vector3 a = positions[indices[i + 1]] - positions[indices[i]];
+				Vector3 b = positions[indices[i + 2]] - positions[indices[i]];
+
+				Vector3 normal = Vector3::Cross(a, b);
+				normals.push_back(normal);
+			}
+			//assert(false && "No Implemented Yet!");
 		}
 
 		void UpdateTransforms()
 		{
-			assert(false && "No Implemented Yet!");
+			//assert(false && "No Implemented Yet!");
 			//Calculate Final Transform 
 			//const auto finalTransform = ...
 
@@ -137,6 +153,29 @@ namespace dae
 
 			//Transform Normals (normals > transformedNormals)
 			//...
+			transformedNormals.clear();
+			transformedPositions.clear();
+			transformedNormals.reserve(normals.size());
+			transformedPositions.reserve(positions.size());
+			Matrix finalTransform = translationTransform * rotationTransform * scaleTransform;
+			//Matrix finalTransform = scaleTransform * rotationTransform * translationTransform;
+			for(int i{} ; i < positions.size();i++)
+			{
+				Vector3 transPos = finalTransform.TransformPoint(positions[i] );
+				transformedPositions.emplace_back(transPos);
+			}
+			positions = transformedPositions;
+
+			//Matrix finalTransform = scaleTransform * rotationTransform * translationTransform;
+			for (int i{}; i < normals.size(); i++)
+			{
+				Vector3 transNorm = finalTransform.TransformVector(normals[i]);
+				transformedNormals.emplace_back(transNorm);
+			}
+			normals = transformedNormals;
+			//transformedPositions = positions;
+			//transformedNormals = normals;
+			
 		}
 	};
 #pragma endregion

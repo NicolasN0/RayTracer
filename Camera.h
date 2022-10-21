@@ -61,19 +61,23 @@ namespace dae
 			const uint8_t* pKeyboardState = SDL_GetKeyboardState(nullptr);
 			if(pKeyboardState[SDL_SCANCODE_W])
 			{
-				origin.z += 1 * deltaTime;
+				//origin.z += 1 * deltaTime;
+				origin += forward * deltaTime;
 			}
 			if (pKeyboardState[SDL_SCANCODE_S])
 			{
-				origin.z -= 1 * deltaTime;
+				//origin.z -= 1 * deltaTime;
+				origin -= forward * deltaTime;
 			}
 			if (pKeyboardState[SDL_SCANCODE_A])
 			{
-				origin.x -= 1 * deltaTime;
+				//origin.x -= 1 * deltaTime;
+				origin -= right * deltaTime;
 			}
 			if (pKeyboardState[SDL_SCANCODE_D])
 			{
-				origin.x += 1 * deltaTime;
+				//origin.x += 1 * deltaTime;
+				origin += right * deltaTime;
 			}
 			//Mouse Input
 			int mouseX{}, mouseY{};
@@ -95,6 +99,10 @@ namespace dae
 			Matrix finalRot = Matrix::CreateRotation(totalPitch, totalYaw, 0);
 			forward = finalRot.TransformVector(Vector3::UnitZ);
 			forward.Normalize();
+			right = finalRot.TransformVector(Vector3::UnitX);
+			right.Normalize();
+			up = finalRot.TransformVector(Vector3::UnitY);
+			up.Normalize();
 			//Matrix finalRot = forward*
 		}
 	};

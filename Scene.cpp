@@ -53,6 +53,28 @@ namespace dae {
 			}
 		}
 
+
+		/*for (size_t i{}; i < GetTriangles().size(); i++)
+		{
+			HitRecord record{};
+			GeometryUtils::HitTest_Triangle(m_Triangles[i], ray, record, false);
+			if (record.t < smallestRecord.t)
+			{
+				smallestRecord = record;
+
+			}
+		}*/
+		for (size_t i{}; i < m_TriangleMeshGeometries.size(); i++)
+		{
+			HitRecord record{};
+			GeometryUtils::HitTest_TriangleMesh(m_TriangleMeshGeometries[i], ray, record, false);
+			if (record.t < smallestRecord.t)
+			{
+				smallestRecord = record;
+
+			}
+		}
+
 		closestHit = smallestRecord;
 
 
@@ -79,6 +101,27 @@ namespace dae {
 				return true;
 			}
 		
+		}
+
+		/*for (size_t i{}; i < GetTriangles().size(); i++)
+		{
+			HitRecord record{};
+			if (GeometryUtils::HitTest_Triangle(m_Triangles[i], ray, record, false))
+			{
+				return true;
+			}
+
+		}*/
+
+		for (size_t i{}; i < m_TriangleMeshGeometries.size(); i++)
+		{
+			HitRecord record{};
+			if(GeometryUtils::HitTest_TriangleMesh(m_TriangleMeshGeometries[i], ray, record, false))
+			{
+				return true;
+			}
+			
+			
 		}
 		//todo W3
 		
@@ -265,5 +308,57 @@ namespace dae {
 		//AddPointLight({ 0,2.5f,-5.f }, 25.f, colors::White);
 		
 		
+	}
+	void Scene_W4::Initialize()
+	{
+		m_Camera.origin = { 0.f,1.f,-5.f };
+		//m_Camera.origin = { 0.f,1.f,4.f };
+
+		m_Camera.fovAngle = 45.f;
+		m_Camera.totalYaw = 0;
+		//m_Camera.totalYaw = PI;
+
+		const unsigned char matLambert_GrayBlue = AddMaterial(new Material_Lambert({ .49f, .57f, .57f }, 1.f));
+		const unsigned char matLambert_White = AddMaterial(new Material_Lambert(colors::White, 1.f));
+
+		//plane
+		AddPlane({ 0.f,0.f,10.f }, { 0.f,0.f,-1.f }, matLambert_GrayBlue);
+		AddPlane({ 0.f,0.f,0.f }, { 0.f,1.f,0.f }, matLambert_GrayBlue);
+		AddPlane({ 0.f,10.f,0.f }, { 0.f,-1.f,0.f }, matLambert_GrayBlue);
+		AddPlane({ 5.f,0.f,0.f }, { -1.f,0.f,0.f }, matLambert_GrayBlue);
+		AddPlane({ -5.f,0.f,0.f }, { 1.f,0.f,0.f }, matLambert_GrayBlue);
+
+		//triangle
+		/*auto triangle{ Triangle{{-.75f,.5f,.0f},{-.75f,2.f,.0f}, {.75f, .5f, 0.f}} };
+		triangle.cullMode = TriangleCullMode::NoCulling;
+		triangle.materialIndex = matLambert_White;
+
+		m_Triangles.emplace_back(triangle);*/
+
+		//triangle mesh
+		pMesh = AddTriangleMesh(TriangleCullMode::NoCulling, matLambert_White);
+		pMesh->positions = { {-.75f,-1.f,.0f},{-.75f,1.f,.0f},{.75f,1.f,1.f},{.75f,-1.f,0.f} };
+		pMesh->indices =
+		{
+			0,1,2,
+			0,2,3
+		};
+		pMesh->CalculateNormals();
+
+		pMesh->Translate({ 0.f,1.5f,0.f });
+		pMesh->RotateY(45);
+		
+		pMesh->UpdateTransforms();
+		
+		//light
+		AddPointLight({ 0.f,5.f,5.f }, 50.f, ColorRGB(1.f, .61f, .45f));
+		AddPointLight({ -2.5f,5.f,-5.f }, 70.f, ColorRGB(1.f, .8f, .45f));
+		AddPointLight({ 2.5f,2.5f,-5.f }, 50.f, ColorRGB(.34f, .47f, .68f));
+	}
+	void Scene_W4::Update(dae::Timer* pTimer)
+	{
+		Scene::Update(pTimer);
+		//pMesh->RotateY(PI_DIV_2 * pTimer->GetTotal());
+		//pMesh->UpdateTransforms();
 	}
 }

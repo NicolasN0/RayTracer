@@ -111,6 +111,7 @@ namespace dae
 		ColorRGB Shade(const HitRecord& hitRecord = {}, const Vector3& l = {}, const Vector3& v = {}) override
 		{
 			//todo: W3
+			float a{ Square(m_Roughness) };
 			ColorRGB f0; //= (m_Metalness == 0) ? (0.04f, 0.04f, 0.04f) : m_Albedo;
 			if(m_Metalness == 0)
 			{
@@ -119,13 +120,14 @@ namespace dae
 			{
 				f0 = m_Albedo;
 			}
-			Vector3 halfVector = (v + l) / (v + l).Magnitude();
+			Vector3 halfVector = (v + -l) / (v + -l).Magnitude();
 			
 			ColorRGB F = BRDF::FresnelFunction_Schlick(halfVector.Normalized(),v.Normalized(),f0);
-			float D = BRDF::NormalDistribution_GGX(-hitRecord.normal,halfVector.Normalized(),m_Roughness);
-			float G = BRDF::GeometryFunction_SchlickGGX(-hitRecord.normal.Normalized(),v.Normalized(),m_Roughness);
-			float GS = BRDF::GeometryFunction_Smith(-hitRecord.normal, v, l, m_Roughness);
-			ColorRGB spec = ColorRGB(D * F * G) / (4.f * Vector3::Dot(v, hitRecord.normal) * Vector3::Dot(l, hitRecord.normal));
+			float D = BRDF::NormalDistribution_GGX(-hitRecord.normal,halfVector.Normalized(),a);
+			//float G = BRDF::GeometryFunction_SchlickGGX(-hitRecord.normal.Normalized(),v.Normalized(),m_Roughness);
+			float GS = BRDF::GeometryFunction_Smith(-hitRecord.normal, v, -l, a);
+			
+			ColorRGB spec = ColorRGB(D * F * GS) / (4.f * Vector3::Dot(v, hitRecord.normal) * Vector3::Dot(-l, hitRecord.normal));
 
 			ColorRGB kd;
 			if(m_Metalness)
@@ -142,6 +144,7 @@ namespace dae
 			return spec + diffuse;
 		}
 
+		
 	private:
 		ColorRGB m_Albedo{0.955f, 0.637f, 0.538f}; //Copper
 		float m_Metalness{1.0f};

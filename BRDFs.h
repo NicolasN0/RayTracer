@@ -71,17 +71,13 @@ namespace dae
 		 * \param roughness Roughness of the material
 		 * \return BRDF Normal Distribution Term using Trowbridge-Reitz GGX
 		 */
+	
 		static float NormalDistribution_GGX(const Vector3& n, const Vector3& h, float roughness)
 		{
-			//todo: W3
-			float alphaRoughe = powf(roughness, 2);
-			float roughSquar = powf(alphaRoughe, 2);
-			float dotNHSquar = powf(Vector3::Dot(n, h), 2);
-			float B = powf(roughSquar, 2) - 1;
+			float dotSquared = Square(Vector3::Dot(n, h));
+			float B = Square(roughness) - 1;
 
-			float normDistrubation = roughSquar /( PI * powf(dotNHSquar * B + 1, 2));
-			//assert(false && "Not Implemented Yet");
-			return normDistrubation;
+			return Square(roughness) / (PI * Square(dotSquared * B + 1));
 		}
 
 
@@ -96,14 +92,16 @@ namespace dae
 		{
 			//todo: W3
 			
-			float alphaRoughe = powf(roughness, 2);
-			float k = powf((alphaRoughe + 1), 2) / 8;
+			//float alphaRoughe = powf(roughness, 2);
+			float k = powf((roughness + 1), 2) / 8;
 
 			float top = Vector3::Dot(n, v);
-			
+			if(top < 0) return 0;
 			//assert(false && "Not Implemented Yet");
 			return top/(top*(1-k)+k);
 		}
+
+		
 
 		/**
 		 * \brief BRDF Geometry Function >> Smith (Direct Lighting)
@@ -118,8 +116,10 @@ namespace dae
 			//todo: W3
 			
 			//assert(false && "Not Implemented Yet");
-			return GeometryFunction_SchlickGGX(n, v, roughness) * GeometryFunction_SchlickGGX(n, l, roughness);;
+			return GeometryFunction_SchlickGGX(n, v, Square(roughness)) * GeometryFunction_SchlickGGX(n, l, Square(roughness));
 		}
+
+	
 
 	}
 }

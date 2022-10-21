@@ -31,15 +31,15 @@ void Renderer::Render(Scene* pScene) const
 	float FOV = tan(camera.fovAngle / 2);
 	const Matrix cameraToWorld = camera.CalculateCameraToWorld();
 
-	float screenWidth{ static_cast<float>(m_Width) };
-	float screenHeight{ static_cast<float>(m_Height) };
-	float aspectRatio{ screenWidth / screenHeight };
+	//float screenWidth{ static_cast<float>(m_Width) };
+	//float screenHeight{ static_cast<float>(m_Height) };
+	//float aspectRatio{ screenWidth / screenHeight };
 
-	float fov{ tan(camera.fovAngle / 2) };
-	Matrix camToWorld{ camera.CalculateCameraToWorld() };
+	/*float fov{ tan(camera.fovAngle / 2) };
+	Matrix camToWorld{ camera.CalculateCameraToWorld() };*/
 
-	size_t lightsSize{ lights.size() };
-	float offset = 0.0001f;
+	//size_t lightsSize{ lights.size() };
+	//float offset = 0.0001f;
 
 	for (int px{}; px < m_Width; ++px)
 	{
@@ -119,9 +119,19 @@ void Renderer::Render(Scene* pScene) const
 					Vector3 direction{ LightUtils::GetDirectionToLight(light,closestHit.origin) };
 					Ray lightRay{ closestHit.origin + (closestHit.normal * 0.0001f), direction.Normalized(), 0.0001f, direction.Magnitude() };
 
+					if(m_ShadowsEnabled)
+					{
+						if(pScene->DoesHit(lightRay))
+						{
+							std::cout << "huh";
+							continue;
+							
+						}
+					}
+
 					ergb = LightUtils::GetRadiance(light, closestHit.origin);
-					//BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit, lightRay.direction, camera.forward);
-					BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit, -lightRay.direction, viewRay.direction.Normalized());
+					BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit, lightRay.direction, camera.forward);
+					//BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit, -lightRay.direction, viewRay.direction.Normalized());
 
 					switch(m_CurrentLightingMode)
 					{
@@ -139,7 +149,7 @@ void Renderer::Render(Scene* pScene) const
 						break;
 					}
 					//shadow
-					if (m_ShadowsEnabled)
+					/*if (m_ShadowsEnabled)
 					{
 						if (pScene->DoesHit(lightRay))
 						{
@@ -148,7 +158,7 @@ void Renderer::Render(Scene* pScene) const
 
 						}
 
-					}
+					}*/
 
 				}
 

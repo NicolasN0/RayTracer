@@ -353,8 +353,12 @@ namespace dae {
 		//Mesh Cube
 		pMesh = AddTriangleMesh(TriangleCullMode::BackFaceCulling, matLambert_White);
 		Utils::ParseOBJ("Resources/simple_cube.obj", pMesh->positions, pMesh->normals, pMesh->indices);
-		//pMesh->Scale({ .7f,.7f,.7f });
-		pMesh->Translate({ 0.f,2.f,0.f });
+		pMesh->Scale({ .7f,.7f,.7f });
+		pMesh->Translate({ 0.f,1.f,0.f });
+
+		//AABB doesnt work yet
+		//pMesh->UpdateAABB();
+		
 
 		pMesh->UpdateTransforms();
 	
@@ -367,7 +371,7 @@ namespace dae {
 	void Scene_W4::Update(dae::Timer* pTimer)
 	{
 		Scene::Update(pTimer);
-		pMesh->RotateY(PI_DIV_2 * pTimer->GetTotal());
-		pMesh->UpdateTransforms();
+		//pMesh->RotateY(PI_DIV_2 * pTimer->GetTotal());
+		//pMesh->UpdateTransforms();
 	}
 }

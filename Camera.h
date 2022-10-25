@@ -93,8 +93,7 @@ namespace dae
 				totalPitch -= mouseX * rotspeed * deltaTime;
 				totalYaw -= mouseY * rotspeed * deltaTime;
 			}
-			/*totalPitch -= 0.05f * deltaTime;
-			totalYaw -= 0.05f * deltaTime;*/
+			
 			
 
 			Matrix finalRot = Matrix::CreateRotation(totalPitch, totalYaw, 0);

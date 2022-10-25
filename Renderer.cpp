@@ -11,7 +11,7 @@
 
 #include <ppl.h> //parallel_for
 #include <future> //async
-#define ASYNC
+//#define ASYNC
 //#define PARALLEL_FOR
 using namespace dae;
 
@@ -30,7 +30,7 @@ void Renderer::Render(Scene* pScene) const
 {
 	Camera& camera = pScene->GetCamera();
 	//const Matrix cameraToWorld = camera.CalculateCameraToWorld(); //In other Part?? Double??
-
+	camera.CalculateCameraToWorld();
 
 	//const float fovAngle = camera.fovAngle * TO_RADIANS;
 	//const float fov = tan(fovAngle / 2/f)

@@ -87,6 +87,9 @@ namespace dae
 		std::vector<Vector3> transformedPositions{};
 		std::vector<Vector3> transformedNormals{};
 
+
+		Vector3 totalTranslationTest{};
+
 		void Translate(const Vector3& translation)
 		{
 			translationTransform = Matrix::CreateTranslation(translation);
@@ -157,8 +160,20 @@ namespace dae
 			transformedPositions.clear();
 			transformedNormals.reserve(normals.size());
 			transformedPositions.reserve(positions.size());
-			Matrix finalTransform = translationTransform * rotationTransform * scaleTransform;
-			//Matrix finalTransform = scaleTransform * rotationTransform * translationTransform;
+			
+
+			//try first multiplying with negative translation matrix at end to recenter origin for calculations
+			Vector3 negativeTranslation = translationTransform.GetTranslation() * -1;
+			Matrix finalTransform = translationTransform * rotationTransform * scaleTransform ;
+
+			//Matrix finalTransform = translationTransform * rotationTransform * scaleTransform;
+			//Matrix finalTransform = scaleTransform;
+			//finalTransform *= rotationTransform;
+			//finalTransform *= translationTransform;
+
+			//Add totalTranslation (Test)
+			totalTranslationTest += translationTransform.GetTranslation();
+
 			for(int i{} ; i < positions.size();i++)
 			{
 				Vector3 transPos = finalTransform.TransformPoint(positions[i] );
@@ -175,7 +190,11 @@ namespace dae
 			normals = transformedNormals;
 			//transformedPositions = positions;
 			//transformedNormals = normals;
-			
+
+			//reset matrix
+			scaleTransform = Matrix{};
+			rotationTransform = Matrix{};
+			//translationTransform = Matrix{};
 		}
 	};
 #pragma endregion

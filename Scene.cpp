@@ -336,7 +336,7 @@ namespace dae {
 		m_Triangles.emplace_back(triangle);*/
 
 		//triangle mesh
-		pMesh = AddTriangleMesh(TriangleCullMode::NoCulling, matLambert_White);
+		/*pMesh = AddTriangleMesh(TriangleCullMode::NoCulling, matLambert_White);
 		pMesh->positions = { {-.75f,-1.f,.0f},{-.75f,1.f,.0f},{.75f,1.f,1.f},{.75f,-1.f,0.f} };
 		pMesh->indices =
 		{
@@ -348,8 +348,17 @@ namespace dae {
 		pMesh->Translate({ 0.f,1.5f,0.f });
 		pMesh->RotateY(45);
 		
+		pMesh->UpdateTransforms();*/
+
+		//Mesh Cube
+		pMesh = AddTriangleMesh(TriangleCullMode::BackFaceCulling, matLambert_White);
+		Utils::ParseOBJ("Resources/simple_cube.obj", pMesh->positions, pMesh->normals, pMesh->indices);
+		//pMesh->Scale({ .7f,.7f,.7f });
+		pMesh->Translate({ 0.f,2.f,0.f });
+
 		pMesh->UpdateTransforms();
-		
+	
+
 		//light
 		AddPointLight({ 0.f,5.f,5.f }, 50.f, ColorRGB(1.f, .61f, .45f));
 		AddPointLight({ -2.5f,5.f,-5.f }, 70.f, ColorRGB(1.f, .8f, .45f));
@@ -358,7 +367,7 @@ namespace dae {
 	void Scene_W4::Update(dae::Timer* pTimer)
 	{
 		Scene::Update(pTimer);
-		//pMesh->RotateY(PI_DIV_2 * pTimer->GetTotal());
-		//pMesh->UpdateTransforms();
+		pMesh->RotateY(PI_DIV_2 * pTimer->GetTotal());
+		pMesh->UpdateTransforms();
 	}
 }

@@ -104,14 +104,17 @@ namespace dae {
 
 	Matrix Matrix::CreateTranslation(float x, float y, float z)
 	{
+		//
 		//todo W1
-		assert(false && "Not Implemented Yet");
-		return {};
+		//assert(false && "Not Implemented Yet");
+		return CreateTranslation(Vector3{ x,y,z });
+		
 	}
 
 	Matrix Matrix::CreateTranslation(const Vector3& t)
 	{
 		return { Vector3::UnitX, Vector3::UnitY, Vector3::UnitZ, t };
+		//return { {Vector3::UnitX,0},{Vector3::UnitY,0},{Vector3::UnitZ,0},{t,1} };
 	}
 
 	Matrix Matrix::CreateRotationX(float pitch)
@@ -184,8 +187,9 @@ namespace dae {
 	Matrix Matrix::CreateScale(float sx, float sy, float sz)
 	{
 		//todo W1
-		assert(false && "Not Implemented Yet");
-		return {};
+		return Matrix{ {sx,0,0,0},{0,sy,0,0},{0,0,sz,0},{0,0,0,1} };
+		//assert(false && "Not Implemented Yet");
+		//return {};
 	}
 
 	Matrix Matrix::CreateScale(const Vector3& s)

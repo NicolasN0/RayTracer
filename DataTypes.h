@@ -194,7 +194,7 @@ namespace dae
 			//reset matrix
 			scaleTransform = Matrix{};
 			rotationTransform = Matrix{};
-			//translationTransform = Matrix{};
+			translationTransform = Matrix{};
 		}
 	};
 #pragma endregion

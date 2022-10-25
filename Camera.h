@@ -50,6 +50,7 @@ namespace dae
 			Matrix obn {rightMatrix,upMatrix,forwardMatrix,positionMatrix};
 			
 			//assert(false && "Not Implemented Yet");
+			cameraToWorld = obn; //test to not have to call it in RenderPixel
 			return obn;
 		}
 

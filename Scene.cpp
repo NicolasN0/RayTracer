@@ -326,7 +326,7 @@ namespace dae {
 
 		pMesh->Translate({ 0.f,1.5f,0.f });
 		pMesh->RotateY(45);
-		//pMesh->UpdateAABB();
+		pMesh->UpdateAABB();
 		pMesh->UpdateTransforms();
 
 		//Mesh Cube
@@ -370,7 +370,7 @@ namespace dae {
 		const auto matCT_GraySmoothPlastic = AddMaterial(new Material_CookTorrence({ .75f, .75f, .75f }, 0.f, .1f));
 
 		const unsigned char matLambert_GrayBlue = AddMaterial(new Material_Lambert({ .49f, .57f, .57f }, 1.f));
-		const unsigned char matLambert_White = AddMaterial(new Material_Lambert(colors::Gray, 1.f));
+		const unsigned char matLambert_White = AddMaterial(new Material_Lambert(colors::White, 1.f));
 
 		//plane
 		AddPlane({ 0.f,0.f,10.f }, { 0.f,0.f,-1.f }, matLambert_GrayBlue);
@@ -440,7 +440,7 @@ namespace dae {
 		const auto matCT_GraySmoothPlastic = AddMaterial(new Material_CookTorrence({ .75f, .75f, .75f }, 0.f, .1f));
 
 		const unsigned char matLambert_GrayBlue = AddMaterial(new Material_Lambert({ .49f, .57f, .57f }, 1.f));
-		const unsigned char matLambert_White = AddMaterial(new Material_Lambert(colors::Gray, 1.f));
+		const unsigned char matLambert_White = AddMaterial(new Material_Lambert(colors::White, 1.f));
 
 		//plane
 		AddPlane({ 0.f,0.f,10.f }, { 0.f,0.f,-1.f }, matLambert_GrayBlue);
@@ -465,6 +465,9 @@ namespace dae {
 	}
 	void dae::Scene_W4_BunnyScene::Update(Timer* pTimer)
 	{
+		
+		//pMesh->RotateY(PI_DIV_2 * pTimer->GetTotal());
+		//pMesh->RotateY((PI_DIV_2 * pTimer->GetTotal()));
 		pMesh->RotateY(PI_DIV_2 * pTimer->GetTotal());
 		pMesh->UpdateAABB();
 		pMesh->UpdateTransforms();

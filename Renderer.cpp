@@ -271,7 +271,7 @@ void dae::Renderer::RenderPixel(Scene* pScene, uint32_t pixelIndex, float fov, f
 				break;
 			}
 			//shadow
-		/*	if (m_ShadowsEnabled)
+			/*if (m_ShadowsEnabled)
 			{
 				if (pScene->DoesHit(lightRay))
 				{

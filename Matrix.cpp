@@ -159,6 +159,7 @@ namespace dae {
 
 	Matrix Matrix::CreateRotationY(float yaw)
 	{
+		yaw *= (PI / 180);
 		Vector3 first{ cosf(yaw),0, sinf(yaw) };
 		Vector3 second{ 0, 1, 0 };
 		Vector3 third{ -sinf(yaw), 0, cosf(yaw) };
@@ -167,6 +168,7 @@ namespace dae {
 
 	Matrix Matrix::CreateRotationX(float pitch)
 	{
+		
 		Vector3 first{ 1,0,0 };
 		Vector3 second{ 0, cosf(pitch), -sinf(pitch) };
 		Vector3 third{ 0, sinf(pitch),  cosf(pitch) };
@@ -178,6 +180,7 @@ namespace dae {
 		////todo W1
 		//assert(false && "Not Implemented Yet");
 		//return {};
+		
 		Vector3 first{ cos(roll),-sin(roll),0};
 		Vector3 second{ sin(roll),cos(roll),0};
 		Vector3 third{ 0,0,1 };

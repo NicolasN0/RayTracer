@@ -188,6 +188,7 @@ namespace dae
 
 		void CalculateNormals()
 		{
+		
 			for(int i{} ; i < indices.size();i+=3)
 			{
 				//Vector3 a = positions[i];

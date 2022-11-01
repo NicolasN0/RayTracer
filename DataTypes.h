@@ -263,7 +263,12 @@ namespace dae
 			//rotationTransform = Matrix{};
 			//translationTransform = Matrix{};
 
-			const Matrix finalTransform{ scaleTransform * rotationTransform.Transpose() * translationTransform };
+			//const Matrix finalTransform{ scaleTransform * rotationTransform.Transpose() * translationTransform };
+			totalTranslationTest += translationTransform.GetTranslation();
+			Matrix totalTransMatrix = Matrix::CreateTranslation(totalTranslationTest);
+			Matrix totalTransMatrixNeg = Matrix::CreateTranslation(-totalTranslationTest);
+
+			const Matrix finalTransform{ totalTransMatrixNeg * scaleTransform * rotationTransform * translationTransform * totalTransMatrix};
 
 			for (int i{}; i < positions.size(); i++)
 			{

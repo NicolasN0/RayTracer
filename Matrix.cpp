@@ -117,44 +117,60 @@ namespace dae {
 		//return { {Vector3::UnitX,0},{Vector3::UnitY,0},{Vector3::UnitZ,0},{t,1} };
 	}
 
-	Matrix Matrix::CreateRotationX(float pitch)
-	{
-		////todo W1
-		//Vector3 first{ 1,0,0 };
-		//Vector3 second{ 0,cos(pitch),-sin(pitch)};
-		//Vector3 third{ 0,sin(pitch),cos(pitch)};
-		//Matrix rot{ first,second,third,Vector3{0,0,0} };
-		////assert(false && "Not Implemented Yet");
-		//return rot;
+	//Matrix Matrix::CreateRotationX(float pitch)
+	//{
+	//	////todo W1
+	//	//Vector3 first{ 1,0,0 };
+	//	//Vector3 second{ 0,cos(pitch),-sin(pitch)};
+	//	//Vector3 third{ 0,sin(pitch),cos(pitch)};
+	//	//Matrix rot{ first,second,third,Vector3{0,0,0} };
+	//	////assert(false && "Not Implemented Yet");
+	//	//return rot;
 
 
-		Vector3 first{ cos(pitch),0,sin(pitch) };
-		Vector3 second{ 0,1,0 };
-		Vector3 third{ -sin(pitch),0,cos(pitch) };
-		Matrix rot{ first,second,third,Vector3{0,0,0} };
-		//assert(false && "Not Implemented Yet");
-		return rot;
-	}
+	//	Vector3 first{ cos(pitch),0,sin(pitch) };
+	//	Vector3 second{ 0,1,0 };
+	//	Vector3 third{ -sin(pitch),0,cos(pitch) };
+	//	Matrix rot{ first,second,third,Vector3{0,0,0} };
+	//	//assert(false && "Not Implemented Yet");
+	//	return rot;
+	//}
+
+	//Matrix Matrix::CreateRotationY(float yaw)
+	//{
+	//	//////todo W1
+	//	////assert(false && "Not Implemented Yet");
+	//	////return {};
+	//	//Vector3 first{ cos(yaw),0,sin(yaw)};
+	//	//Vector3 second{ 0,1,0 };
+	//	//Vector3 third{ -sin(yaw),0,cos(yaw)};
+	//	//Matrix rot{ first,second,third,Vector3{0,0,0} };
+	//	////assert(false && "Not Implemented Yet");
+	//	//return rot;
+
+
+	//	Vector3 first{ 1,0,0 };
+	//	Vector3 second{ 0,cos(yaw),-sin(yaw) };
+	//	Vector3 third{ 0,sin(yaw),cos(yaw) };
+	//	Matrix rot{ first,second,third,Vector3{0,0,0} };
+	//	//assert(false && "Not Implemented Yet");
+	//	return rot;
+	//}
 
 	Matrix Matrix::CreateRotationY(float yaw)
 	{
-		//////todo W1
-		////assert(false && "Not Implemented Yet");
-		////return {};
-		//Vector3 first{ cos(yaw),0,sin(yaw)};
-		//Vector3 second{ 0,1,0 };
-		//Vector3 third{ -sin(yaw),0,cos(yaw)};
-		//Matrix rot{ first,second,third,Vector3{0,0,0} };
-		////assert(false && "Not Implemented Yet");
-		//return rot;
+		Vector3 first{ cosf(yaw),0, sinf(yaw) };
+		Vector3 second{ 0, 1, 0 };
+		Vector3 third{ -sinf(yaw), 0, cosf(yaw) };
+		return { first, second, third, Vector3{0,0,0} };
+	}
 
-
+	Matrix Matrix::CreateRotationX(float pitch)
+	{
 		Vector3 first{ 1,0,0 };
-		Vector3 second{ 0,cos(yaw),-sin(yaw) };
-		Vector3 third{ 0,sin(yaw),cos(yaw) };
-		Matrix rot{ first,second,third,Vector3{0,0,0} };
-		//assert(false && "Not Implemented Yet");
-		return rot;
+		Vector3 second{ 0, cosf(pitch), -sinf(pitch) };
+		Vector3 third{ 0, sinf(pitch),  cosf(pitch) };
+		return { first, second, third, Vector3{0,0,0} };
 	}
 
 	Matrix Matrix::CreateRotationZ(float roll)

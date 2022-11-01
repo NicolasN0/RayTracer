@@ -90,6 +90,14 @@ namespace dae
 				return false;
 			}
 
+			TriangleCullMode currentCulling = triangle.cullMode;
+			if (ignoreHitRecord) {
+				
+				currentCulling == TriangleCullMode::BackFaceCulling ?
+					currentCulling = TriangleCullMode::FrontFaceCulling :
+					currentCulling = TriangleCullMode::BackFaceCulling;
+			}
+
 			Vector3 center{ (triangle.v0 + triangle.v1 + triangle.v2) / 3 };
 			Vector3 L = center - ray.origin;
 			float t = Vector3::Dot(L, normal) / Vector3::Dot(ray.direction,normal);
@@ -183,10 +191,10 @@ namespace dae
 			//todo W5
 
 			//slabtest
-			/*if(!SlabTest_TriangleMesh(mesh,ray))
+			if(!SlabTest_TriangleMesh(mesh,ray))
 			{
 				return false;
-			}*/
+			}
 
 			//assert(false && "No Implemented Yet!");
 			bool result;

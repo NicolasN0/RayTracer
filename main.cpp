@@ -48,9 +48,16 @@ int main(int argc, char* args[])
 	//const auto pScene = new Scene_W1();
 	//const auto pScene2 = new Scene_W2();
 	//const auto pScene = new Scene_W3();
-	const auto pScene = new Scene_W4();
+	//const auto pScene = new Scene_W4();
+
+
+	const auto pScene = new Scene_W4_ReferenceScene();
+	//const auto pSceneBunny = new Scene_W4_BunnyScene();
 	//pScene->Initialize();
+
+
 	pScene->Initialize();
+	//pSceneBunny->Initialize();
 	//Start loop
 	pTimer->Start();
 	float printTimer = 0.f;
@@ -83,11 +90,15 @@ int main(int argc, char* args[])
 
 		//--------- Update ---------
 		//pScene->Update(pTimer);
+
 		pScene->Update(pTimer);
+		//pSceneBunny->Update(pTimer);
 
 		//--------- Render ---------
 		//pRenderer->Render(pScene);
+
 		pRenderer->Render(pScene);
+		//pRenderer->Render(pSceneBunny);
 
 		//--------- Timer ---------
 		pTimer->Update();
@@ -112,7 +123,9 @@ int main(int argc, char* args[])
 
 	//Shutdown "framework"
 	//delete pScene2;
+
 	delete pScene;
+	//delete pSceneBunny;
 	delete pRenderer;
 	delete pTimer;
 

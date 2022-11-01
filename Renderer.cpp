@@ -12,7 +12,7 @@
 #include <ppl.h> //parallel_for
 #include <future> //async
 //#define ASYNC
-//#define PARALLEL_FOR
+#define PARALLEL_FOR
 using namespace dae;
 
 
@@ -33,7 +33,7 @@ void Renderer::Render(Scene* pScene) const
 	camera.CalculateCameraToWorld();
 
 	//const float fovAngle = camera.fovAngle * TO_RADIANS;
-	//const float fov = tan(fovAngle / 2/f)
+	//const float FOV = tan(fovAngle / 2.f);
 	float FOV = tan(camera.fovAngle / 2);
 
 	const float aspectRatio = m_Width / static_cast<float>(m_Height);
@@ -104,89 +104,89 @@ void Renderer::Render(Scene* pScene) const
 
 	//		float cx = static_cast<float>((((2 * (px + 0.5)) / m_Width) - 1)) * m_AspectRatio * FOV;
 	//		float cy = static_cast<float>(1 - (2 * (py + 0.5)) / m_Height) * FOV;
-			//Vector3 rayDirection{ cx,cy,1 };
-		
-			//Ray viewRay{ camera.origin,cameraToWorld.TransformVector(rayDirection.Normalized()) };
+	//		Vector3 rayDirection{ cx,cy,1 };
+	//	
+	//		Ray viewRay{ camera.origin,camera.CalculateCameraToWorld().TransformVector(rayDirection.Normalized()) };
 
 
-			//ColorRGB finalColor{};
+	//		ColorRGB finalColor{};
 
-			//HitRecord closestHit{};
+	//		HitRecord closestHit{};
 
-			//
-
-
-			//pScene->GetClosestHit(viewRay, closestHit);
+	//		
 
 
+	//		pScene->GetClosestHit(viewRay, closestHit);
 
-			//if (closestHit.didHit)
-			//{
-			//	ColorRGB ergb;
-			//	ColorRGB BRDFrgb;
-			//	for (auto light : pScene->GetLights())
-			//	{
-			//		float dot{ Vector3::Dot(closestHit.normal, LightUtils::GetDirectionToLight(light, closestHit.origin).Normalized()) };
-			//		if (dot < 0) {
 
-			//			continue;
 
-			//		}
-			//		Vector3 direction{ LightUtils::GetDirectionToLight(light,closestHit.origin) };
-			//		Ray lightRay{ closestHit.origin + (closestHit.normal * 0.0001f), direction.Normalized(), 0.0001f, direction.Magnitude() };
+	//		if (closestHit.didHit)
+	//		{
+	//			ColorRGB ergb;
+	//			ColorRGB BRDFrgb;
+	//			for (auto light : pScene->GetLights())
+	//			{
+	//				float dot{ Vector3::Dot(closestHit.normal, LightUtils::GetDirectionToLight(light, closestHit.origin).Normalized()) };
+	//				if (dot < 0) {
 
-			//		if(m_ShadowsEnabled)
-			//		{
-			//			if(pScene->DoesHit(lightRay))
-			//			{
-			//				std::cout << "huh";
-			//				continue;
-			//				
-			//			}
-			//		}
+	//					continue;
 
-			//		ergb = LightUtils::GetRadiance(light, closestHit.origin);
-			//		BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit, lightRay.direction, camera.forward);
-			//		//BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit, -lightRay.direction, viewRay.direction.Normalized());
+	//				}
+	//				Vector3 direction{ LightUtils::GetDirectionToLight(light,closestHit.origin) };
+	//				Ray lightRay{ closestHit.origin + (closestHit.normal * 0.0001f), direction.Normalized(), 0.0001f, direction.Magnitude() };
 
-			//		switch(m_CurrentLightingMode)
-			//		{
-			//		case LightingMode::ObservedArea:
-			//			finalColor += ColorRGB(dot, dot, dot);
-			//			break;
-			//		case LightingMode::Radiance:
-			//			finalColor += ergb;
-			//			break;
-			//		case LightingMode::BRDF:
-			//			finalColor += BRDFrgb;
-			//			break;
-			//		case LightingMode::Combined:
-			//			finalColor += ergb * BRDFrgb * dot;
-			//			break;
-			//		}
-			//		//shadow
-			//		/*if (m_ShadowsEnabled)
-			//		{
-			//			if (pScene->DoesHit(lightRay))
-			//			{
+	//				if(m_ShadowsEnabled)
+	//				{
+	//					if(pScene->DoesHit(lightRay))
+	//					{
+	//						std::cout << "huh";
+	//						continue;
+	//						
+	//					}
+	//				}
 
-			//				finalColor *= 0.5f;
+	//				ergb = LightUtils::GetRadiance(light, closestHit.origin);
+	//				BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit, lightRay.direction, camera.forward);
+	//				//BRDFrgb = materials[closestHit.materialIndex]->Shade(closestHit, -lightRay.direction, viewRay.direction.Normalized());
 
-			//			}
+	//				switch(m_CurrentLightingMode)
+	//				{
+	//				case LightingMode::ObservedArea:
+	//					finalColor += ColorRGB(dot, dot, dot);
+	//					break;
+	//				case LightingMode::Radiance:
+	//					finalColor += ergb;
+	//					break;
+	//				case LightingMode::BRDF:
+	//					finalColor += BRDFrgb;
+	//					break;
+	//				case LightingMode::Combined:
+	//					finalColor += ergb * BRDFrgb * dot;
+	//					break;
+	//				}
+	//				//shadow
+	//				/*if (m_ShadowsEnabled)
+	//				{
+	//					if (pScene->DoesHit(lightRay))
+	//					{
 
-			//		}*/
+	//						finalColor *= 0.5f;
 
-			//	}
+	//					}
 
-			//}
+	//				}*/
 
-			//finalColor.MaxToOne();
+	//			}
 
-			//m_pBufferPixels[px + (py * m_Width)] = SDL_MapRGB(m_pBuffer->format,
-			//	static_cast<uint8_t>(finalColor.r * 255),
-			//	static_cast<uint8_t>(finalColor.g * 255),
-			//	static_cast<uint8_t>(finalColor.b * 255));
-		//}
+	//		}
+
+	//		finalColor.MaxToOne();
+
+	//		m_pBufferPixels[px + (py * m_Width)] = SDL_MapRGB(m_pBuffer->format,
+	//			static_cast<uint8_t>(finalColor.r * 255),
+	//			static_cast<uint8_t>(finalColor.g * 255),
+	//			static_cast<uint8_t>(finalColor.b * 255));
+	//	}
 	//}
 
 	//@END
@@ -205,8 +205,8 @@ void dae::Renderer::RenderPixel(Scene* pScene, uint32_t pixelIndex, float fov, f
 	float rx = px + 0.5f;
 	float ry = py + 0.5f;
 
-	float cx = (2 * (rx / float(m_Width)) - 1) * aspectRatio * fov;
-	float cy = (1 - (2 * (ry / float(m_Width)))) * fov;
+	float cx = static_cast<float>((((2 * (px + 0.5)) / m_Width) - 1)) * m_AspectRatio * fov;
+	float cy = static_cast<float>(1 - (2 * (py + 0.5)) / m_Height) * fov;
 
 	//rest of code from double loop
 
@@ -245,7 +245,7 @@ void dae::Renderer::RenderPixel(Scene* pScene, uint32_t pixelIndex, float fov, f
 			{
 				if (pScene->DoesHit(lightRay))
 				{
-					std::cout << "huh";
+					//std::cout << "huh";
 					continue;
 
 				}
@@ -271,7 +271,7 @@ void dae::Renderer::RenderPixel(Scene* pScene, uint32_t pixelIndex, float fov, f
 				break;
 			}
 			//shadow
-			/*if (m_ShadowsEnabled)
+		/*	if (m_ShadowsEnabled)
 			{
 				if (pScene->DoesHit(lightRay))
 				{

@@ -96,7 +96,7 @@ namespace dae
 			
 			
 
-			Matrix finalRot = Matrix::CreateRotation(totalPitch, totalYaw, 0);
+			Matrix finalRot = Matrix::CreateRotation(totalYaw, totalPitch, 0);
 			forward = finalRot.TransformVector(Vector3::UnitZ);
 			forward.Normalize();
 			right = finalRot.TransformVector(Vector3::UnitX);

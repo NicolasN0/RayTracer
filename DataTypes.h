@@ -158,6 +158,7 @@ namespace dae
 
 		void RotateY(float yaw)
 		{
+			yaw *= (PI / 180);
 			rotationTransform = Matrix::CreateRotationY(yaw);
 			
 		}

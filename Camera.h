@@ -29,13 +29,14 @@ namespace dae
 		Vector3 forward{Vector3::UnitZ};
 		Vector3 up{Vector3::UnitY};
 		Vector3 right{Vector3::UnitX};
+		Vector3 rightLocal{ Vector3::UnitX };
 
 		float totalPitch{0.f};
 		float totalYaw{0.f};
 
 		Matrix cameraToWorld{};
 
-		float rotspeed{ 0.01f };
+		float rotspeed{ 0.005f };
 
 		Matrix CalculateCameraToWorld()
 		{
@@ -73,25 +74,33 @@ namespace dae
 			if (pKeyboardState[SDL_SCANCODE_A])
 			{
 				//origin.x -= 1 * deltaTime;
-				origin -= right * deltaTime;
+				//origin -= right * deltaTime;
+				origin -= rightLocal * deltaTime;
 			}
 			if (pKeyboardState[SDL_SCANCODE_D])
 			{
 				//origin.x += 1 * deltaTime;
-				origin += right * deltaTime;
+				//origin += right * deltaTime;
+				origin += rightLocal * deltaTime;
 			}
 			//Mouse Input
 			int mouseX{}, mouseY{};
 			const uint32_t mouseState = SDL_GetRelativeMouseState(&mouseX, &mouseY);
 
-		
-			//todo: W2
+			
+			//std::cout << SDL_BUTTON(mouseState);
+			//Middle mouse is 2
+			//Right mouse is 8
 			if(SDL_BUTTON(mouseState) == 1)
 			{
 				/*totalPitch -= mouseY * rotspeed * deltaTime;
 				totalYaw -= mouseX * rotspeed * deltaTime;*/
-				totalPitch -= mouseX * rotspeed * deltaTime;
-				totalYaw -= mouseY * rotspeed * deltaTime;
+				totalPitch -= mouseX * rotspeed ;
+				totalYaw -= mouseY * rotspeed ;
+			}
+			if(SDL_BUTTON(mouseState) == 16)
+			{
+				std::cout << "both;";
 			}
 			
 			
@@ -99,10 +108,13 @@ namespace dae
 			Matrix finalRot = Matrix::CreateRotation(totalYaw, totalPitch, 0);
 			forward = finalRot.TransformVector(Vector3::UnitZ);
 			forward.Normalize();
-			right = finalRot.TransformVector(Vector3::UnitX);
+			/*right = finalRot.TransformVector(Vector3::UnitX);
 			right.Normalize();
 			up = finalRot.TransformVector(Vector3::UnitY);
-			up.Normalize();
+			up.Normalize();*/
+			rightLocal = finalRot.TransformVector(Vector3::UnitX);
+			rightLocal.Normalize();
+
 			//Matrix finalRot = forward*
 		}
 	};

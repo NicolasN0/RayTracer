@@ -465,7 +465,7 @@ namespace dae {
 	}
 	void dae::Scene_W4_BunnyScene::Update(Timer* pTimer)
 	{
-		
+		Scene::Update(pTimer);
 		
 		pMesh->RotateY(PI_DIV_2 * pTimer->GetTotal());
 		pMesh->UpdateAABB();

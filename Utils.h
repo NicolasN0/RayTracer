@@ -198,6 +198,8 @@ namespace dae
 
 			//assert(false && "No Implemented Yet!");
 			bool result;
+			float dist{ FLT_MAX };
+			HitRecord temp{};
 			for(int i{}; i < mesh.indices.size();i++)
 			{
 				if( i % 3 == 0 || i == 0)
@@ -211,14 +213,27 @@ namespace dae
 					t.normal = mesh.normals[i%3];
 					t.cullMode = mesh.cullMode;
 					t.materialIndex = mesh.materialIndex;
-					result = HitTest_Triangle(t, ray,hitRecord);
+					/*result = HitTest_Triangle(t, ray,hitRecord);
 					if(result == true)
 					{
 						return true;
+					}*/
+					if(HitTest_Triangle(t,ray,temp,ignoreHitRecord))
+					{
+						if(ignoreHitRecord)
+						{
+							return true;
+						}
+						if(temp.didHit && temp.t < dist)
+						{
+							dist = temp.t;
+							hitRecord = temp;
+						}
 					}
 				}
 			}
-			return false;
+			return hitRecord.didHit;
+
 		}
 
 		inline bool HitTest_TriangleMesh(const TriangleMesh& mesh, const Ray& ray)

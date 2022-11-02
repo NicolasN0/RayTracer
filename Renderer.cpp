@@ -232,7 +232,7 @@ void dae::Renderer::RenderPixel(Scene* pScene, uint32_t pixelIndex, float fov, f
 		ColorRGB BRDFrgb;
 		for (auto light : pScene->GetLights())
 		{
-			float dot{ Vector3::Dot(closestHit.normal, LightUtils::GetDirectionToLight(light, closestHit.origin).Normalized()) };
+			float dot{ Vector3::Dot(closestHit.normal.Normalized(), LightUtils::GetDirectionToLight(light, closestHit.origin).Normalized()) };
 			if (dot < 0) {
 
 				continue;

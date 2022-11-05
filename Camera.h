@@ -88,23 +88,37 @@ namespace dae
 			const uint32_t mouseState = SDL_GetRelativeMouseState(&mouseX, &mouseY);
 
 			
-			//std::cout << SDL_BUTTON(mouseState);
+		
 			//Middle mouse is 2
 			//Right mouse is 8
-			if(SDL_BUTTON(mouseState) == 1)
+
+
+			//MovementMouse
+			if (SDL_BUTTON(mouseState) == 1)
+			{
+				/*totalPitch -= mouseY * rotspeed * deltaTime;
+				totalYaw -= mouseX * rotspeed * deltaTime;*/
+				origin -= forward * mouseY * deltaTime;
+				
+			}
+
+			if(SDL_BUTTON(mouseState) == 16)
+			{
+				
+				origin.y -=  mouseY * deltaTime;
+			}
+
+			//RotationMouse
+			if(SDL_BUTTON(mouseState) == 8)
 			{
 				/*totalPitch -= mouseY * rotspeed * deltaTime;
 				totalYaw -= mouseX * rotspeed * deltaTime;*/
 				totalPitch -= mouseX * rotspeed ;
 				totalYaw -= mouseY * rotspeed ;
 			}
-			if(SDL_BUTTON(mouseState) == 16)
-			{
-				std::cout << "both;";
-			}
 			
 			
-
+			//std::cout << totalYaw << std::endl;
 			Matrix finalRot = Matrix::CreateRotation(totalYaw, totalPitch, 0);
 			forward = finalRot.TransformVector(Vector3::UnitZ);
 			forward.Normalize();

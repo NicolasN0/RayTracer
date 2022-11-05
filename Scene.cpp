@@ -54,16 +54,7 @@ namespace dae {
 		}
 
 
-		/*for (size_t i{}; i < GetTriangles().size(); i++)
-		{
-			HitRecord record{};
-			GeometryUtils::HitTest_Triangle(m_Triangles[i], ray, record, false);
-			if (record.t < smallestRecord.t)
-			{
-				smallestRecord = record;
 
-			}
-		}*/
 		for (size_t i{}; i < m_TriangleMeshGeometries.size(); i++)
 		{
 			HitRecord record{};

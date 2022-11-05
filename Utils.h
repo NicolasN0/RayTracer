@@ -12,9 +12,8 @@ namespace dae
 		//SPHERE HIT-TESTS
 		inline bool HitTest_Sphere(const Sphere& sphere, const Ray& ray, HitRecord& hitRecord, bool ignoreHitRecord = false)
 		{
-			
 
-			float A{ Vector3::Dot(ray.direction, ray.direction) };
+			/*float A{ Vector3::Dot(ray.direction, ray.direction) };
 			float B{ Vector3::Dot((2 * ray.direction), (ray.origin - sphere.origin)) };
 			float C{ Vector3::Dot((ray.origin - sphere.origin), (ray.origin - sphere.origin)) - powf(sphere.radius,2) };
 
@@ -24,6 +23,10 @@ namespace dae
 
 			if (discriminant > 0) {
 				if (tMin > ray.min && tMin < ray.max) {
+					if(ignoreHitRecord)
+					{
+						return true;
+					}
 					hitRecord.didHit = true;
 					hitRecord.materialIndex = sphere.materialIndex;
 					hitRecord.t = tMin;
@@ -33,6 +36,10 @@ namespace dae
 				}
 				else if (tMax > ray.min && tMax < ray.max)
 				{
+					if(ignoreHitRecord)
+					{
+						return true;
+					}
 					hitRecord.didHit = true;
 					hitRecord.materialIndex = sphere.materialIndex;
 					hitRecord.t = tMax;
@@ -41,9 +48,33 @@ namespace dae
 					return true;
 				}
 			}
-			return false;
+			return false;*/
 
-		
+			Vector3 TC{ sphere.origin - ray.origin };
+			float dp{ Vector3::Dot(TC, ray.direction) };
+			float tclSquare{ TC.SqrMagnitude() };
+			float odSquare{ tclSquare - Square(dp) };
+
+			float radiusSquared{ Square(sphere.radius) };
+			if (odSquare > radiusSquared) {
+				return false;
+			}
+			float tca{ sqrtf(radiusSquared - odSquare) };
+
+			float t{ dp - tca };
+			if (t > ray.min && t < ray.max) {
+				if (ignoreHitRecord) return true;
+				Vector3 I{ ray.origin + t * ray.direction };
+				hitRecord.didHit = true;
+				hitRecord.materialIndex = sphere.materialIndex;
+				hitRecord.t = t;
+				hitRecord.origin = I;
+				hitRecord.normal = (I - sphere.origin).Normalized();
+				return true;
+
+			}
+
+			return false;
 		}
 
 		inline bool HitTest_Sphere(const Sphere& sphere, const Ray& ray)
@@ -271,7 +302,9 @@ namespace dae
 				break;
 			case LightType::Point:
 				dist = light.origin - target ;
-				return light.color * light.intensity / powf(dist.Magnitude(), 2);
+				//return light.color * light.intensity / powf(dist.Magnitude(), 2);
+				return light.color * light.intensity / Square(dist.Magnitude());
+
 				break;
 			}
 

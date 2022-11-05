@@ -93,8 +93,8 @@ namespace dae
 			//todo: W3
 			
 			//float alphaRoughe = powf(roughness, 2);
-			float k = powf((roughness + 1), 2) / 8;
-
+			//float k = powf((roughness + 1), 2) / 8;
+			float k = Square(roughness + 1) / 8;
 			float top = Vector3::Dot(n, v);
 			if(top < 0) return 0;
 			//assert(false && "Not Implemented Yet");

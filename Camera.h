@@ -113,8 +113,10 @@ namespace dae
 			{
 				/*totalPitch -= mouseY * rotspeed * deltaTime;
 				totalYaw -= mouseX * rotspeed * deltaTime;*/
+
 				totalPitch -= mouseX * rotspeed ;
 				totalYaw -= mouseY * rotspeed ;
+				std::cout << mouseX << ' ' << totalPitch << ' ' << totalYaw << std::endl;
 			}
 			
 			

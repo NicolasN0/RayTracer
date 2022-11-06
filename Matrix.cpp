@@ -193,7 +193,8 @@ namespace dae {
 	{
 		////todo W1
 		//assert(false && "Not Implemented Yet");
-		return Matrix{ CreateRotationZ(r.z) * CreateRotationY(r.y) * CreateRotationX(r.x) };
+		//return Matrix{ CreateRotationZ(r.z) * CreateRotationY(r.y) * CreateRotationX(r.x) };
+		return Matrix{ CreateRotationZ(r.z)  * CreateRotationX(r.x) * CreateRotationY(r.y) };
 		//return Matrix{ CreateRotationX(r.x) * CreateRotationY(r.y) * CreateRotationZ(r.z) };
 
 	}

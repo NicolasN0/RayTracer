@@ -9,8 +9,8 @@ struct SDL_Surface;
 namespace dae
 {
 	class Scene;
-	class Camera;
-	class Light;
+	struct Camera;
+	struct Light;
 	class Material;
 
 	class Renderer final
@@ -51,6 +51,6 @@ namespace dae
 			Combined //ObservedArea * Radiance * BDRF
 		};
 		LightingMode m_CurrentLightingMode{ LightingMode::Combined };
-		bool m_ShadowsEnabled;
+		bool m_ShadowsEnabled{};
 	};
 }

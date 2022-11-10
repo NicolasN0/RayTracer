@@ -14,17 +14,14 @@ namespace dae
 		static ColorRGB Lambert(float kd, const ColorRGB& cd)
 		{
 			//todo: W3
-			//assert(false && "Not Implemented Yet");
 			return (cd * kd)/PI;
-			//return {};
 		}
 
 		static ColorRGB Lambert(const ColorRGB& kd, const ColorRGB& cd)
 		{
 			//todo: W3
-			//assert(false && "Not Implemented Yet");
 			return (cd * kd) / PI;
-			//return {};
+		
 		}
 
 		/**
@@ -39,7 +36,6 @@ namespace dae
 		static ColorRGB Phong(float ks, float exp, const Vector3& l, const Vector3& v, const Vector3& n)
 		{
 			//todo: W3
-			//assert(false && "Not Implemented Yet");
 			Vector3 reflect = l - 2 * Vector3::Dot(n, l) * n;
 			float angle = Vector3::Dot(reflect, v);
 			float phongSpecRef = ks * powf(angle, exp);
@@ -59,7 +55,6 @@ namespace dae
 		static ColorRGB FresnelFunction_Schlick(const Vector3& h, const Vector3& v, const ColorRGB& f0)
 		{
 			//todo: W3
-			//assert(false && "Not Implemented Yet");
 			ColorRGB F = f0 + (ColorRGB(1, 1, 1) - f0) * powf((1 - (Vector3::Dot(h, v))),5);
 			return F;
 		}
@@ -92,12 +87,10 @@ namespace dae
 		{
 			//todo: W3
 			
-			//float alphaRoughe = powf(roughness, 2);
-			//float k = powf((roughness + 1), 2) / 8;
+			
 			float k = Square(roughness + 1) / 8;
 			float top = Vector3::Dot(n, v);
 			if(top < 0) return 0;
-			//assert(false && "Not Implemented Yet");
 			return top/(top*(1-k)+k);
 		}
 
@@ -115,7 +108,6 @@ namespace dae
 		{
 			//todo: W3
 			
-			//assert(false && "Not Implemented Yet");
 			return GeometryFunction_SchlickGGX(n, v, Square(roughness)) * GeometryFunction_SchlickGGX(n, l, Square(roughness));
 		}
 

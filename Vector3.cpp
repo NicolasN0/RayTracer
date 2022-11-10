@@ -47,7 +47,6 @@ namespace dae {
 	{
 		//todo W1
 		float dot = (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
-		//assert(false && "Not Implemented Yet");
 		return dot;
 	}
 
@@ -55,7 +54,6 @@ namespace dae {
 	{
 		//todo W1
 		Vector3 cross = { v1.y * v2.z - v1.z * v2.y,v1.z * v2.x - v1.x* v2.z, v1.x * v2.y - v1.y * v2.x};
-		//assert(false && "Not Implemented Yet");
 		return cross;
 	}
 

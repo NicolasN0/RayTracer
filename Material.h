@@ -60,7 +60,7 @@ namespace dae
 		ColorRGB Shade(const HitRecord& hitRecord = {}, const Vector3& l = {}, const Vector3& v = {}) override
 		{
 			//todo: W3
-			//assert(false && "Not Implemented Yet");
+			
 			return BRDF::Lambert(m_DiffuseReflectance, m_DiffuseColor);
 			
 		}
@@ -124,7 +124,6 @@ namespace dae
 			
 			ColorRGB F = BRDF::FresnelFunction_Schlick(halfVector.Normalized(),v.Normalized(),f0);
 			float D = BRDF::NormalDistribution_GGX(-hitRecord.normal,halfVector.Normalized(),a);
-			//float G = BRDF::GeometryFunction_SchlickGGX(-hitRecord.normal.Normalized(),v.Normalized(),m_Roughness);
 			float GS = BRDF::GeometryFunction_Smith(-hitRecord.normal, v, -l, a);
 			
 			ColorRGB spec = ColorRGB(D * F * GS) / (4.f * Vector3::Dot(v, hitRecord.normal) * Vector3::Dot(-l, hitRecord.normal));
@@ -140,7 +139,7 @@ namespace dae
 
 			ColorRGB diffuse = BRDF::Lambert(kd, m_Albedo);
 			
-			//assert(false && "Not Implemented Yet");
+			
 			return spec + diffuse;
 		}
 

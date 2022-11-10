@@ -192,12 +192,6 @@ namespace dae
 		
 			for(int i{} ; i < indices.size();i+=3)
 			{
-				//Vector3 a = positions[i];
-				//Vector3 b = positions[i + 1];
-				//Vector3 c = positions[i + 2];
-
-				/*Vector3 a = positions[i+1] - positions[i];
-				Vector3 b = positions[i+2] - positions[i];*/
 
 				Vector3 a = positions[indices[i + 1]] - positions[indices[i]];
 				Vector3 b = positions[indices[i + 2]] - positions[indices[i]];
@@ -210,61 +204,7 @@ namespace dae
 
 		void UpdateTransforms()
 		{
-			////assert(false && "No Implemented Yet!");
-			////Calculate Final Transform 
-			////const auto finalTransform = ...
-
-			////Transform Positions (positions > transformedPositions)
-			////...
-
-			////Transform Normals (normals > transformedNormals)
-			////...
-			//transformedNormals.clear();
-			//transformedPositions.clear();
-			//transformedNormals.reserve(normals.size());
-			//transformedPositions.reserve(positions.size());
-			//
-			//
-
-			////try first multiplying with negative translation matrix at end to recenter origin for calculations
-			//Vector3 negativeTranslation = totalTranslationTest * -1;
-			//Matrix negativeTransMatrix = { Vector3::UnitX,Vector3::UnitY,Vector3::UnitZ,negativeTranslation };
-			//Matrix posTransMatrix = { Vector3::UnitX,Vector3::UnitY,Vector3::UnitZ,totalTranslationTest };
-
-			////Matrix finalTransform = translationTransform * rotationTransform * scaleTransform ;
-
-			////Matrix finalTransform = translationTransform * rotationTransform * scaleTransform;
-			//Matrix finalTransform = scaleTransform * rotationTransform * translationTransform;
-
-			////Matrix finalTransform = negativeTransMatrix * scaleTransform * rotationTransform * translationTransform * posTransMatrix;
-
-			////Add totalTranslation (Test)
-			//totalTranslationTest += translationTransform.GetTranslation();
-
-			//for(int i{} ; i < positions.size();i++)
-			//{
-			//	Vector3 transPos = finalTransform.TransformPoint(positions[i] );
-			//	transformedPositions.emplace_back(transPos);
-			//}
-			//positions = transformedPositions;
-
-			//for (int i{}; i < normals.size(); i++)
-			//{
-			//	Vector3 transNorm = finalTransform.TransformVector(normals[i]);
-			//	transformedNormals.emplace_back(transNorm);
-			//}
-			//normals = transformedNormals;
-			////transformedPositions = positions;
-			////transformedNormals = normals;
-
-
-			////UpdateTransformedAABB(finalTransform);
-			////reset matrix
-			//scaleTransform = Matrix{};
-			//rotationTransform = Matrix{};
-			//translationTransform = Matrix{};
-
-			//const Matrix finalTransform{ scaleTransform * rotationTransform.Transpose() * translationTransform };
+			
 			totalTranslationTest += translationTransform.GetTranslation();
 			Matrix totalTransMatrix = Matrix::CreateTranslation(totalTranslationTest);
 			Matrix totalTransMatrixNeg = Matrix::CreateTranslation(-totalTranslationTest);

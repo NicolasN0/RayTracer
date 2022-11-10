@@ -285,8 +285,8 @@ namespace dae {
 		//m_Camera.origin = { 0.f,1.f,4.f };
 
 		m_Camera.fovAngle = 45.f;
-		m_Camera.totalYaw = 0;
-		//m_Camera.totalYaw = PI;
+		m_Camera.totalPitch = 0;
+		//m_Camera.totalPitch = PI;
 
 		const unsigned char matLambert_GrayBlue = AddMaterial(new Material_Lambert({ .49f, .57f, .57f }, 1.f));
 		const unsigned char matLambert_White = AddMaterial(new Material_Lambert(colors::White, 1.f));
@@ -298,13 +298,7 @@ namespace dae {
 		AddPlane({ 5.f,0.f,0.f }, { -1.f,0.f,0.f }, matLambert_GrayBlue);
 		AddPlane({ -5.f,0.f,0.f }, { 1.f,0.f,0.f }, matLambert_GrayBlue);
 
-		//triangle
-		/*auto triangle{ Triangle{{-.75f,.5f,.0f},{-.75f,2.f,.0f}, {.75f, .5f, 0.f}} };
-		triangle.cullMode = TriangleCullMode::NoCulling;
-		triangle.materialIndex = matLambert_White;
-
-		m_Triangles.emplace_back(triangle);*/
-
+		
 		//triangle mesh
 		pMesh = AddTriangleMesh(TriangleCullMode::NoCulling, matLambert_White);
 		pMesh->positions = { {-.75f,-1.f,.0f},{-.75f,1.f,.0f},{.75f,1.f,1.f},{.75f,-1.f,0.f} };
@@ -321,16 +315,6 @@ namespace dae {
 		pMesh->UpdateTransforms();
 
 		//Mesh Cube
-		//pMesh = AddTriangleMesh(TriangleCullMode::BackFaceCulling, matLambert_White);
-		//Utils::ParseOBJ("Resources/simple_cube.obj", pMesh->positions, pMesh->normals, pMesh->indices);
-		//pMesh->Scale({ .7f,.7f,.7f });
-		//pMesh->Translate({ 0.f,1.f,0.f });
-
-		//
-		////pMesh->UpdateAABB();
-		//
-
-		//pMesh->UpdateTransforms();
 	
 
 		//light
@@ -341,8 +325,7 @@ namespace dae {
 	void Scene_W4::Update(dae::Timer* pTimer)
 	{
 		Scene::Update(pTimer);
-		//pMesh->RotateY(PI_DIV_2 * pTimer->GetTotal());
-		//pMesh->UpdateTransforms();
+
 	}
 
 

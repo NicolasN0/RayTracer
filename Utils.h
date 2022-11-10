@@ -164,26 +164,28 @@ namespace dae
 			case TriangleCullMode::BackFaceCulling:
 				if(Vector3::Dot(normal,ray.direction) > 0)
 				{
-					//OR TRUE?
+					
 					return false;
 				}
 				break;
 			case TriangleCullMode::FrontFaceCulling:
 				if (Vector3::Dot(normal, ray.direction) < 0)
 				{
-					//OR TRUE?
+				
 					return false;
 				}
 				break;
 			
 			}
-			//assert(false && "No Implemented Yet!");
 			hitRecord.normal = normal;
 			hitRecord.origin = p;
 			hitRecord.didHit = true;
 			hitRecord.t = t;
 			hitRecord.materialIndex = triangle.materialIndex;
 			return true;
+
+
+			
 		}
 
 		inline bool HitTest_Triangle(const Triangle& triangle, const Ray& ray)
@@ -228,7 +230,7 @@ namespace dae
 			}
 
 			//assert(false && "No Implemented Yet!");
-			bool result;
+			//bool result;
 			float dist{ FLT_MAX };
 			HitRecord temp{};
 			for(int i{}; i < mesh.indices.size();i++)
@@ -244,11 +246,7 @@ namespace dae
 					t.normal = mesh.normals[i%3];
 					t.cullMode = mesh.cullMode;
 					t.materialIndex = mesh.materialIndex;
-					/*result = HitTest_Triangle(t, ray,hitRecord);
-					if(result == true)
-					{
-						return true;
-					}*/
+				
 					if(HitTest_Triangle(t,ray,temp,ignoreHitRecord))
 					{
 						if(ignoreHitRecord)
@@ -302,7 +300,7 @@ namespace dae
 				break;
 			case LightType::Point:
 				dist = light.origin - target ;
-				//return light.color * light.intensity / powf(dist.Magnitude(), 2);
+			
 				return light.color * light.intensity / Square(dist.Magnitude());
 
 				break;

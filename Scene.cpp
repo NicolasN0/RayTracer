@@ -273,11 +273,9 @@ namespace dae {
 	void Scene_W4::Initialize()
 	{
 		m_Camera.origin = { 0.f,1.f,-5.f };
-		//m_Camera.origin = { 0.f,1.f,4.f };
 
 		m_Camera.fovAngle = 45.f;
 		m_Camera.totalPitch = 0;
-		//m_Camera.totalPitch = PI;
 
 		const unsigned char matLambert_GrayBlue = AddMaterial(new Material_Lambert({ .49f, .57f, .57f }, 1.f));
 		const unsigned char matLambert_White = AddMaterial(new Material_Lambert(colors::White, 1.f));
@@ -384,7 +382,7 @@ namespace dae {
 		const float yawAngle{ (cos(pTimer->GetTotal()) + 1.f) / 2.f * PI_2 };
 		for (const auto m : m_Meshes)
 		{
-			//m->RotateY(yawAngle);
+			m->RotateY(yawAngle);
 			m->UpdateAABB();
 			m->UpdateTransforms();
 		}
@@ -423,7 +421,6 @@ namespace dae {
 
 		pMesh = AddTriangleMesh(TriangleCullMode::BackFaceCulling, matLambert_White);
 		Utils::ParseOBJ("Resources/lowpoly_bunny.obj", pMesh->positions, pMesh->normals, pMesh->indices);
-		
 		pMesh->Scale({ 2.f,2.f,2.f });
 		pMesh->UpdateAABB();
 		pMesh->UpdateTransforms();
@@ -431,8 +428,8 @@ namespace dae {
 	void dae::Scene_W4_BunnyScene::Update(Timer* pTimer)
 	{
 		Scene::Update(pTimer);
-		
-		pMesh->RotateY(PI_DIV_2 * pTimer->GetTotal());
+		const float yawAngle{ (cos(pTimer->GetTotal()) + 1.f) / 2.f * PI_2 };
+		pMesh->RotateY(yawAngle);
 		pMesh->UpdateAABB();
 		pMesh->UpdateTransforms();
 		

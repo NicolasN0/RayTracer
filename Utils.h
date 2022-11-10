@@ -53,7 +53,6 @@ namespace dae
 		inline bool HitTest_Plane(const Plane& plane, const Ray& ray, HitRecord& hitRecord, bool ignoreHitRecord = false)
 		{
 			//todo W1
-			//assert(false && "No Implemented Yet!");
 			float t = Vector3::Dot((plane.origin - ray.origin) , plane.normal) / Vector3::Dot(ray.direction , plane.normal);
 			if(t > ray.min && t < ray.max)
 			{
@@ -212,8 +211,7 @@ namespace dae
 				return false;
 			}
 
-			//assert(false && "No Implemented Yet!");
-			//bool result;
+		
 			float dist{ FLT_MAX };
 			HitRecord temp{};
 			for(int i{}; i < mesh.indices.size();i++)

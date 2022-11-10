@@ -69,7 +69,6 @@ namespace dae {
 		closestHit = smallestRecord;
 
 
-		//assert(false && "No Implemented Yet!");
 	}
 
 	bool Scene::DoesHit(const Ray& ray) const
@@ -94,15 +93,7 @@ namespace dae {
 		
 		}
 
-		/*for (size_t i{}; i < GetTriangles().size(); i++)
-		{
-			HitRecord record{};
-			if (GeometryUtils::HitTest_Triangle(m_Triangles[i], ray, record, false))
-			{
-				return true;
-			}
 
-		}*/
 
 		for (size_t i{}; i < m_TriangleMeshGeometries.size(); i++)
 		{
@@ -393,7 +384,7 @@ namespace dae {
 		const float yawAngle{ (cos(pTimer->GetTotal()) + 1.f) / 2.f * PI_2 };
 		for (const auto m : m_Meshes)
 		{
-			m->RotateY(yawAngle);
+			//m->RotateY(yawAngle);
 			m->UpdateAABB();
 			m->UpdateTransforms();
 		}

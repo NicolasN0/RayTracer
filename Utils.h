@@ -13,42 +13,7 @@ namespace dae
 		inline bool HitTest_Sphere(const Sphere& sphere, const Ray& ray, HitRecord& hitRecord, bool ignoreHitRecord = false)
 		{
 
-			/*float A{ Vector3::Dot(ray.direction, ray.direction) };
-			float B{ Vector3::Dot((2 * ray.direction), (ray.origin - sphere.origin)) };
-			float C{ Vector3::Dot((ray.origin - sphere.origin), (ray.origin - sphere.origin)) - powf(sphere.radius,2) };
-
-			float discriminant{ powf(B,2) - 4 * A * C };
-			float tMax{ (-B + sqrtf(discriminant)) / 2 * A };
-			float tMin{ (-B - sqrtf(discriminant)) / 2 * A };
-
-			if (discriminant > 0) {
-				if (tMin > ray.min && tMin < ray.max) {
-					if(ignoreHitRecord)
-					{
-						return true;
-					}
-					hitRecord.didHit = true;
-					hitRecord.materialIndex = sphere.materialIndex;
-					hitRecord.t = tMin;
-					hitRecord.origin = ray.origin + tMin * ray.direction;
-					hitRecord.normal = (hitRecord.origin - sphere.origin).Normalized();
-					return true;
-				}
-				else if (tMax > ray.min && tMax < ray.max)
-				{
-					if(ignoreHitRecord)
-					{
-						return true;
-					}
-					hitRecord.didHit = true;
-					hitRecord.materialIndex = sphere.materialIndex;
-					hitRecord.t = tMax;
-					hitRecord.origin = ray.origin + tMax * ray.direction;
-					hitRecord.normal = (hitRecord.origin - sphere.origin).Normalized();
-					return true;
-				}
-			}
-			return false;*/
+		
 
 			Vector3 TC{ sphere.origin - ray.origin };
 			float dp{ Vector3::Dot(TC, ray.direction) };
@@ -122,12 +87,7 @@ namespace dae
 			}
 
 			TriangleCullMode currentCulling = triangle.cullMode;
-			if (ignoreHitRecord) {
-				
-				currentCulling == TriangleCullMode::BackFaceCulling ?
-					currentCulling = TriangleCullMode::FrontFaceCulling :
-					currentCulling = TriangleCullMode::BackFaceCulling;
-			}
+		
 
 			Vector3 center{ (triangle.v0 + triangle.v1 + triangle.v2) / 3 };
 			Vector3 L = center - ray.origin;
@@ -159,24 +119,47 @@ namespace dae
 				return false;
 			}
 
-			switch(triangle.cullMode)
+
+			if (ignoreHitRecord) {
+				if (currentCulling == TriangleCullMode::BackFaceCulling) {
+					currentCulling = TriangleCullMode::FrontFaceCulling;
+				}
+				else if (currentCulling == TriangleCullMode::FrontFaceCulling) {
+					currentCulling = TriangleCullMode::BackFaceCulling;
+				}
+			}
+
+
+			switch (currentCulling)
 			{
 			case TriangleCullMode::BackFaceCulling:
-				if(Vector3::Dot(normal,ray.direction) > 0)
+				if (Vector3::Dot(normal, ray.direction) > 0)
 				{
-					
+
+
 					return false;
+
 				}
 				break;
 			case TriangleCullMode::FrontFaceCulling:
 				if (Vector3::Dot(normal, ray.direction) < 0)
 				{
-				
+
+
 					return false;
+
 				}
 				break;
-			
+
 			}
+
+			
+
+			if(ignoreHitRecord)
+			{
+				return true;
+			}
+
 			hitRecord.normal = normal;
 			hitRecord.origin = p;
 			hitRecord.didHit = true;
@@ -285,8 +268,7 @@ namespace dae
 
 			return Vector3(light.origin - origin);
 			////todo W3
-			//assert(false && "No Implemented Yet!");
-			//return {};
+		
 		}
 
 		inline ColorRGB GetRadiance(const Light& light, const Vector3& target)

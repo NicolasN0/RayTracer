@@ -53,10 +53,10 @@ int main(int argc, char* args[])
 
 	const auto pScene = new Scene_W4_ReferenceScene();
 	//const auto pScene = new Scene_W4_BunnyScene();
-	//pScene->Initialize();
+	
 
 
-	//pScene->Initialize();
+	
 	pScene->Initialize();
 	//Start loop
 	pTimer->Start();

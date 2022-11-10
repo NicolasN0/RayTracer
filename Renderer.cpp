@@ -32,7 +32,7 @@ void Renderer::Render(Scene* pScene) const
 	camera.CalculateCameraToWorld();
 
 	
-	float FOV = tan(camera.fovAngle / 2);
+	float FOV = tan(camera.fovAngle * TO_RADIANS / 2);
 
 	const float aspectRatio = m_Width / static_cast<float>(m_Height);
 
